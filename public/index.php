@@ -8,6 +8,7 @@ use App\Controllers\AuthController;
 use App\Controllers\CandidatureController;
 use App\Controllers\FreelanceController;
 use App\Controllers\ManagerController;
+use App\Controllers\MissionController;
 use App\Core\Database;
 use App\Core\Router;
 use App\Core\Security;
@@ -85,6 +86,48 @@ $router->put("/managers/{id}", function (string $id) use ($pdo): void {
 
 $router->delete("/managers/{id}", function (string $id) use ($pdo): void {
     new ManagerController(new Manager($pdo))->destroy((int) $id);
+});
+
+// SF7 : Liste des missions
+$router->get("/missions", function (): void {
+    $dbConnection = Database::getConnection();
+    (new MissionController($dbConnection))->index();
+});
+
+// SF8 : Création d'une mission
+$router->post("/missions", function (): void {
+    $dbConnection = Database::getConnection();
+    (new MissionController($dbConnection))->store();
+});
+
+// SF7 : Afficher une mission spécifique
+$router->get("/missions/{id}", function (string $id): void {
+    $dbConnection = Database::getConnection();
+    (new MissionController($dbConnection))->show((int) $id);
+});
+
+// SF9 : Mettre à jour une mission
+$router->put("/missions/{id}", function (string $id): void {
+    $dbConnection = Database::getConnection();
+    (new MissionController($dbConnection))->update((int) $id);
+});
+
+// SF10 : Supprimer une mission
+$router->delete("/missions/{id}", function (string $id): void {
+    $dbConnection = Database::getConnection();
+    (new MissionController($dbConnection))->destroy((int) $id);
+});
+
+// SF11 : Statistiques
+$router->get("/missions/stats", function (): void {
+    $dbConnection = Database::getConnection();
+    (new MissionController($dbConnection))->stats();
+});
+
+// Route de test rapide pour les missions
+$router->get("/test-mission", function (): void {
+    $dbConnection = Database::getConnection();
+    (new MissionController($dbConnection))->testCrud();
 });
 
 $router->post("/missions/{id}/applications", function (string $id) use (
