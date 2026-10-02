@@ -16,6 +16,7 @@ final class AuthController
     {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         $this->users = new User(Database::connection());
 =======
         $this->users = new User(Database::getConnection());
@@ -23,11 +24,15 @@ final class AuthController
 =======
         $this->users = new User(Database::connection());
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        $this->users = new User(Database::getConnection());
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 
     public function showLogin(): void
     {
         if (Security::isLoggedIn()) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             header('Location: /');
@@ -40,6 +45,10 @@ final class AuthController
             header('Location: /');
             exit;
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+            header("Location: /");
+            exit();
+>>>>>>> dccf881 (feat: clean auth and seed)
         }
 
         $this->renderLogin();
@@ -47,6 +56,7 @@ final class AuthController
 
     public function login(): void
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (!Security::verifyCsrf($_POST['csrf_token'] ?? null)) {
@@ -62,10 +72,16 @@ final class AuthController
             http_response_code(400);
             $this->renderLogin('Requête invalide, merci de réessayer.');
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        if (!Security::verifyCsrf($_POST["csrf_token"] ?? null)) {
+            http_response_code(400);
+            $this->renderLogin("Requête invalide, merci de réessayer.");
+>>>>>>> dccf881 (feat: clean auth and seed)
 
             return;
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -79,6 +95,8 @@ final class AuthController
             $this->renderLogin('Email ou mot de passe incorrect.');
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
         $email = trim((string) ($_POST["email"] ?? ""));
         $password = (string) ($_POST["password"] ?? "");
 
@@ -89,13 +107,17 @@ final class AuthController
             !password_verify($password, $user["password_hash"])
         ) {
             $this->renderLogin("Email ou mot de passe incorrect.");
+<<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 
             return;
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         if ((int) $user['is_active'] === 0) {
@@ -108,11 +130,16 @@ final class AuthController
         if ((int) $user['is_active'] === 0) {
             $this->renderLogin('Ce compte est désactivé.');
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        if ((int) $user["is_active"] === 0) {
+            $this->renderLogin("Ce compte est désactivé.");
+>>>>>>> dccf881 (feat: clean auth and seed)
 
             return;
         }
 
         Security::login($user);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         header('Location: /');
@@ -122,11 +149,15 @@ final class AuthController
 =======
         header('Location: /');
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        header("Location: /");
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 
     public function logout(): void
     {
         Security::logout();
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         header('Location: /login');
@@ -136,11 +167,15 @@ final class AuthController
 =======
         header('Location: /login');
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        header("Location: /login");
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 
     private function renderLogin(?string $error = null): void
     {
         $csrfToken = Security::csrfToken();
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         require __DIR__ . '/../Views/auth/login.php';
@@ -150,5 +185,8 @@ final class AuthController
 =======
         require __DIR__ . '/../Views/auth/login.php';
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        require __DIR__ . "/../Views/auth/login.php";
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 }

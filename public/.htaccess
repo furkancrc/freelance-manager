@@ -2,22 +2,28 @@ RewriteEngine On
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Sert directement les fichiers/dossiers existants (assets, etc.)
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 # Sert directement les fichiers/dossiers existants (assets, etc.)
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Tout le reste passe par le front controller
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 # Tout le reste passe par le front controller
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 RewriteRule ^ index.php [L]

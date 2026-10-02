@@ -10,6 +10,7 @@ final class User
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     public function __construct(private PDO $pdo)
     {
     }
@@ -21,10 +22,14 @@ final class User
     {
     }
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+    public function __construct(private PDO $pdo) {}
+>>>>>>> dccf881 (feat: clean auth and seed)
 
     /** @return array{id: int, email: string, password_hash: string, role: string, is_active: int}|null */
     public function findByEmail(string $email): ?array
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
@@ -37,6 +42,10 @@ final class User
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
         $stmt->execute(['email' => $email]);
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(["email" => $email]);
+>>>>>>> dccf881 (feat: clean auth and seed)
 
         $user = $stmt->fetch();
 
@@ -45,6 +54,7 @@ final class User
 
     public function findById(int $id): ?array
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE id = :id');
@@ -57,6 +67,10 @@ final class User
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE id = :id');
         $stmt->execute(['id' => $id]);
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute(["id" => $id]);
+>>>>>>> dccf881 (feat: clean auth and seed)
 
         $user = $stmt->fetch();
 

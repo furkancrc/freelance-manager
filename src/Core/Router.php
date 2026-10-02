@@ -6,6 +6,7 @@ namespace App\Core;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 /**
@@ -18,6 +19,8 @@ namespace App\Core;
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 final class Router
 {
     /** @var array<string, array<string, callable>> */
@@ -27,6 +30,7 @@ final class Router
     {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         $this->add('GET', $path, $handler);
 =======
         $this->add("GET", $path, $handler);
@@ -34,10 +38,14 @@ final class Router
 =======
         $this->add('GET', $path, $handler);
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        $this->add("GET", $path, $handler);
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 
     public function post(string $path, callable $handler): void
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         $this->add('POST', $path, $handler);
@@ -66,11 +74,17 @@ final class Router
     }
 
 >>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
+=======
+        $this->add("POST", $path, $handler);
+    }
+
+>>>>>>> dccf881 (feat: clean auth and seed)
     private function add(string $method, string $path, callable $handler): void
     {
         $this->routes[$method][$path] = $handler;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -85,13 +99,18 @@ final class Router
         $path = $path === '' ? '/' : $path;
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
     public function dispatch(string $method, string $uri): void
     {
         $path = rtrim((string) parse_url($uri, PHP_URL_PATH), "/");
         $path = $path === "" ? "/" : $path;
+<<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 
         foreach ($this->routes[$method] ?? [] as $route => $handler) {
             $params = $this->match($route, $path);
@@ -103,6 +122,7 @@ final class Router
         }
 
         http_response_code(404);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -119,6 +139,8 @@ final class Router
         $pattern = '#^' . $pattern . '$#';
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
         require __DIR__ . "/../Views/errors/404.php";
     }
 
@@ -133,14 +155,18 @@ final class Router
             $route,
         );
         $pattern = "#^" . $pattern . '$#';
+<<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 
         if (preg_match($pattern, $path, $matches) !== 1) {
             return null;
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         return array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
@@ -150,5 +176,8 @@ final class Router
 =======
         return array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+        return array_filter($matches, "is_string", ARRAY_FILTER_USE_KEY);
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 }

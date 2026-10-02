@@ -3,6 +3,7 @@
 /** @var string|null $error */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ob_start();
 ?>
 =======
@@ -12,6 +13,9 @@ ob_start(); ?>
 ob_start();
 ?>
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+ob_start(); ?>
+>>>>>>> dccf881 (feat: clean auth and seed)
 <h1>Connexion</h1>
 
 <?php if (!empty($error)): ?>
@@ -19,6 +23,7 @@ ob_start();
 <?php endif; ?>
 
 <form method="post" action="/login">
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
@@ -30,6 +35,11 @@ ob_start();
 =======
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(
+        $csrfToken,
+    ) ?>">
+>>>>>>> dccf881 (feat: clean auth and seed)
 
     <label for="email">Email</label>
     <input type="email" id="email" name="email" required autofocus>
@@ -43,6 +53,7 @@ ob_start();
 $content = ob_get_clean();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 $title = 'Connexion';
 require __DIR__ . '/../layouts/auth.php';
 =======
@@ -54,3 +65,8 @@ require __DIR__ . "/../layouts/auth.php";
 $title = 'Connexion';
 require __DIR__ . '/../layouts/auth.php';
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+$title = "Connexion";
+require __DIR__ . "/../layouts/auth.php";
+
+>>>>>>> dccf881 (feat: clean auth and seed)

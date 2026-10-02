@@ -1,6 +1,7 @@
 <?php
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /** @var array{id:int,email:string,role:string} $user */
 <<<<<<< HEAD
 =======
@@ -63,3 +64,17 @@ require __DIR__ . "/../layouts/main.php";
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+/** @var array{id:int,email:string,role:string} $user */
+ob_start(); ?>
+
+<h1>Bienvenue, <?= htmlspecialchars($user["email"]) ?></h1>
+<p>Vous êtes connecté avec le rôle : <strong><?= htmlspecialchars(
+    $user["role"],
+) ?></strong>.</p>
+<?php
+$content = ob_get_clean();
+$title = "Accueil";
+require __DIR__ . "/../layouts/main.php";
+
+>>>>>>> dccf881 (feat: clean auth and seed)

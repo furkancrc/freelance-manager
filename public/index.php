@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\AuthController;
@@ -30,11 +31,19 @@ use App\Controllers\FreelanceController;
 use App\Core\Router;
 use App\Core\Security;
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+require __DIR__ . "/../vendor/autoload.php";
+
+use App\Controllers\AuthController;
+use App\Core\Router;
+use App\Core\Security;
+>>>>>>> dccf881 (feat: clean auth and seed)
 
 Security::startSession();
 
 $router = new Router();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -87,6 +96,8 @@ $router->post('/freelances/{id}/reviews', function (string $id): void {
 
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 =======
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 $router->get("/", function (): void {
     Security::requireAuth();
     $user = Security::currentUser();
@@ -105,6 +116,7 @@ $router->post("/logout", function (): void {
     new AuthController()->logout();
 });
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 $router->get("/freelances", function (): void {
@@ -163,3 +175,6 @@ $router->dispatch($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
 =======
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+$router->dispatch($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
+>>>>>>> dccf881 (feat: clean auth and seed)
