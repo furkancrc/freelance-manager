@@ -8,6 +8,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     <h1>404 — Page introuvable</h1>
 =======
     <h1>404 - Page introuvable</h1>
@@ -18,6 +19,9 @@
 =======
     <h1>404 - Page introuvable</h1>
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+    <h1>404 - Page introuvable</h1>
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     <p><a href="/">Retour à l'accueil</a></p>
 </body>
 </html>

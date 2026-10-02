@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /** @var array{id:int,email:string,role:string} $user */
 <<<<<<< HEAD
 =======
@@ -20,6 +21,8 @@ require __DIR__ . '/../layouts/main.php';
 =======
 =======
 >>>>>>> f762781 (feat: cleanup candidature & legals)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 ob_start(); ?>
 
 <main class="container">
@@ -62,6 +65,7 @@ $content = ob_get_clean();
 $title = "Mentions Légales";
 require __DIR__ . "/../layouts/main.php";
 
+<<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
@@ -112,3 +116,5 @@ $title = "Mentions Légales";
 require __DIR__ . "/../layouts/main.php";
 
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31

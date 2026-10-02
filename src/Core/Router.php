@@ -7,6 +7,7 @@ namespace App\Core;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 /**
@@ -21,6 +22,8 @@ namespace App\Core;
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 final class Router
 {
     /** @var array<string, array<string, callable>> */
@@ -28,6 +31,7 @@ final class Router
 
     public function get(string $path, callable $handler): void
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -41,6 +45,9 @@ final class Router
 =======
         $this->add("GET", $path, $handler);
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+        $this->add("GET", $path, $handler);
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     }
 
     public function post(string $path, callable $handler): void
@@ -48,16 +55,25 @@ final class Router
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         $this->add('POST', $path, $handler);
+=======
+        $this->add("POST", $path, $handler);
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     }
 
     public function put(string $path, callable $handler): void
     {
+<<<<<<< HEAD
         $this->add('PUT', $path, $handler);
+=======
+        $this->add("PUT", $path, $handler);
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     }
 
     public function delete(string $path, callable $handler): void
     {
+<<<<<<< HEAD
         $this->add('DELETE', $path, $handler);
 <<<<<<< HEAD
 =======
@@ -79,11 +95,17 @@ final class Router
     }
 
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+        $this->add("DELETE", $path, $handler);
+    }
+
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     private function add(string $method, string $path, callable $handler): void
     {
         $this->routes[$method][$path] = $handler;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -101,16 +123,21 @@ final class Router
 =======
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     public function dispatch(string $method, string $uri): void
     {
         $path = rtrim((string) parse_url($uri, PHP_URL_PATH), "/");
         $path = $path === "" ? "/" : $path;
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 
         foreach ($this->routes[$method] ?? [] as $route => $handler) {
             $params = $this->match($route, $path);
@@ -122,6 +149,7 @@ final class Router
         }
 
         http_response_code(404);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -141,6 +169,8 @@ final class Router
 =======
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
         require __DIR__ . "/../Views/errors/404.php";
     }
 
@@ -156,11 +186,14 @@ final class Router
         );
         $pattern = "#^" . $pattern . '$#';
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 
         if (preg_match($pattern, $path, $matches) !== 1) {
             return null;
@@ -169,6 +202,7 @@ final class Router
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         return array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 =======
         return array_filter($matches, "is_string", ARRAY_FILTER_USE_KEY);
@@ -179,5 +213,8 @@ final class Router
 =======
         return array_filter($matches, "is_string", ARRAY_FILTER_USE_KEY);
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+        return array_filter($matches, "is_string", ARRAY_FILTER_USE_KEY);
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     }
 }

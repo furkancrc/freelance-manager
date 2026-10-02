@@ -4,6 +4,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ob_start();
 ?>
 =======
@@ -16,6 +17,9 @@ ob_start();
 =======
 ob_start(); ?>
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+ob_start(); ?>
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 <h1>Connexion</h1>
 
 <?php if (!empty($error)): ?>
@@ -26,6 +30,7 @@ ob_start(); ?>
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
 =======
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(
@@ -40,6 +45,11 @@ ob_start(); ?>
         $csrfToken,
     ) ?>">
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(
+        $csrfToken,
+    ) ?>">
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 
     <label for="email">Email</label>
     <input type="email" id="email" name="email" required autofocus>
@@ -54,6 +64,7 @@ $content = ob_get_clean();
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 $title = 'Connexion';
 require __DIR__ . '/../layouts/auth.php';
 =======
@@ -70,3 +81,8 @@ $title = "Connexion";
 require __DIR__ . "/../layouts/auth.php";
 
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+$title = "Connexion";
+require __DIR__ . "/../layouts/auth.php";
+
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31

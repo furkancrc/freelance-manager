@@ -5,11 +5,16 @@ declare(strict_types=1);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 require __DIR__ . '/../vendor/autoload.php';
+=======
+require __DIR__ . "/../vendor/autoload.php";
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 
 use App\Controllers\AuthController;
 use App\Controllers\CandidatureController;
 use App\Controllers\FreelanceController;
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 require __DIR__ . "/../vendor/autoload.php";
@@ -42,11 +47,21 @@ use App\Controllers\AuthController;
 use App\Core\Router;
 use App\Core\Security;
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+use App\Core\Database;
+use App\Core\Router;
+use App\Core\Security;
+use App\Models\Candidature;
+use App\Models\Freelance;
+use App\Models\Review;
+use App\Models\User;
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 
 Security::startSession();
 
 $router = new Router();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -102,12 +117,17 @@ $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 =======
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+$pdo = Database::getConnection();
+
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 $router->get("/", function (): void {
     Security::requireAuth();
     $user = Security::currentUser();
     require __DIR__ . "/../src/Views/home/index.php";
 });
 
+<<<<<<< HEAD
 $router->get("/login", function (): void {
     new AuthController()->showLogin();
 });
@@ -170,12 +190,75 @@ $router->get("/applications/me", function (): void {
 
 $router->get("/missions/{id}/applications", function (string $id): void {
     new CandidatureController()->forMission((int) $id);
+=======
+$router->get("/login", function () use ($pdo): void {
+    new AuthController(new User($pdo))->showLogin();
+});
+
+$router->post("/login", function () use ($pdo): void {
+    new AuthController(new User($pdo))->login();
+});
+
+$router->post("/logout", function () use ($pdo): void {
+    new AuthController(new User($pdo))->logout();
+});
+
+$router->get("/freelances", function () use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->index();
+});
+
+$router->post("/freelances", function () use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->store();
+});
+
+$router->get("/freelances/{id}", function (string $id) use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->show(
+        (int) $id,
+    );
+});
+
+$router->put("/freelances/{id}", function (string $id) use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->update(
+        (int) $id,
+    );
+});
+
+$router->delete("/freelances/{id}", function (string $id) use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->destroy(
+        (int) $id,
+    );
+});
+
+$router->post("/freelances/{id}/reviews", function (string $id) use (
+    $pdo,
+): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->addReview(
+        (int) $id,
+    );
+});
+
+$router->post("/missions/{id}/applications", function (string $id) use (
+    $pdo,
+): void {
+    new CandidatureController(new Candidature($pdo))->store((int) $id);
+});
+
+$router->get("/applications/me", function () use ($pdo): void {
+    new CandidatureController(new Candidature($pdo))->mine();
+});
+
+$router->get("/missions/{id}/applications", function (string $id) use (
+    $pdo,
+): void {
+    new CandidatureController(new Candidature($pdo))->forMission((int) $id);
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 });
 
 $router->get("/mentions-legales", function (): void {
     require __DIR__ . "/../src/Views/legals/index.php";
 });
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> f762781 (feat: cleanup candidature & legals)
 =======
@@ -188,3 +271,6 @@ $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 =======
 $router->dispatch($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+$router->dispatch($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31

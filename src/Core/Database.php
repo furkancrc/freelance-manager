@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 declare(strict_types=1);
@@ -44,6 +45,8 @@ final class Database
 =======
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 namespace App\Core;
 
 use PDO;
@@ -76,10 +79,13 @@ class Database
 
         return self::$instance;
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     }
 }

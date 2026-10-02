@@ -7,6 +7,7 @@ namespace App\Core;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 /**
@@ -22,12 +23,15 @@ namespace App\Core;
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 final class Security
 {
     public static function startSession(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start([
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -45,6 +49,10 @@ final class Security
                 "cookie_httponly" => true,
                 "cookie_samesite" => "Lax",
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+                "cookie_httponly" => true,
+                "cookie_samesite" => "Lax",
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
             ]);
         }
     }
@@ -52,6 +60,7 @@ final class Security
     public static function login(array $user): void
     {
         session_regenerate_id(true);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -65,16 +74,21 @@ final class Security
 =======
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
         $_SESSION["user"] = [
             "id" => $user["id"],
             "email" => $user["email"],
             "role" => $user["role"],
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
         ];
     }
 
@@ -89,6 +103,7 @@ final class Security
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         return $_SESSION['user'] ?? null;
 =======
         return $_SESSION["user"] ?? null;
@@ -99,6 +114,9 @@ final class Security
 =======
         return $_SESSION["user"] ?? null;
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+        return $_SESSION["user"] ?? null;
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     }
 
     public static function isLoggedIn(): bool
@@ -106,6 +124,7 @@ final class Security
         return self::currentUser() !== null;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -121,17 +140,22 @@ final class Security
 =======
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     public static function requireAuth(): void
     {
         if (!self::isLoggedIn()) {
             header("Location: /login");
             exit();
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
         }
     }
 
@@ -139,6 +163,7 @@ final class Security
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * Vérifie que l'utilisateur est connecté ET a l'un des rôles autorisés.
      *
 =======
@@ -149,12 +174,15 @@ final class Security
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
      * @param string[] $roles
      */
     public static function requireRole(array $roles): void
     {
         self::requireAuth();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -174,11 +202,23 @@ final class Security
 >>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
 =======
 >>>>>>> f8e10eb (fix: freelance controller)
+=======
+        if (!in_array(self::currentUser()["role"], $roles, true)) {
+            http_response_code(403);
+            exit("Accès refusé : rôle insuffisant.");
+        }
+    }
+
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     public static function requireJsonAuth(): array
     {
         $user = self::currentUser();
         if ($user === null) {
+<<<<<<< HEAD
             self::jsonError(401, 'Authentification requise.');
+=======
+            self::jsonError(401, "Authentification requise.");
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
         }
 
         return $user;
@@ -187,20 +227,28 @@ final class Security
     /**
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
      * Variante JSON de requireRole : renvoie 401/403 au lieu de rediriger.
      *
 >>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
 =======
 >>>>>>> f8e10eb (fix: freelance controller)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
      * @param string[] $roles
      */
     public static function requireJsonRole(array $roles): array
     {
         $user = self::requireJsonAuth();
 
+<<<<<<< HEAD
         if (!in_array($user['role'], $roles, true)) {
             self::jsonError(403, 'Rôle insuffisant.');
+=======
+        if (!in_array($user["role"], $roles, true)) {
+            self::jsonError(403, "Rôle insuffisant.");
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
         }
 
         return $user;
@@ -209,6 +257,7 @@ final class Security
     private static function jsonError(int $status, string $message): never
     {
         http_response_code($status);
+<<<<<<< HEAD
         header('Content-Type: application/json');
         echo json_encode(['error' => $message]);
         exit;
@@ -235,6 +284,11 @@ final class Security
             http_response_code(403);
             exit("Accès refusé : rôle insuffisant.");
         }
+=======
+        header("Content-Type: application/json");
+        echo json_encode(["error" => $message]);
+        exit();
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     }
 
     public static function csrfToken(): string
@@ -245,11 +299,14 @@ final class Security
 
         return $_SESSION["csrf_token"];
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 =======
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     }
 
     public static function verifyCsrf(?string $token): bool
@@ -257,6 +314,7 @@ final class Security
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         return $token !== null
             && !empty($_SESSION['csrf_token'])
             && hash_equals($_SESSION['csrf_token'], $token);
@@ -275,5 +333,10 @@ final class Security
             !empty($_SESSION["csrf_token"]) &&
             hash_equals($_SESSION["csrf_token"], $token);
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+        return $token !== null &&
+            !empty($_SESSION["csrf_token"]) &&
+            hash_equals($_SESSION["csrf_token"], $token);
+>>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
     }
 }
