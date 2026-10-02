@@ -9,6 +9,11 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -27,6 +32,7 @@ services:
       - "8080:8080"
     volumes:
       - ./:/var/www/html:Z
+      - vendor_data:/var/www/html/vendor
     environment:
       PHP_DISPLAY_ERRORS: "1"
       DB_HOST: database
@@ -37,5 +43,17 @@ services:
     depends_on:
       - database
 
+  seeder:
+    build: .
+    volumes:
+      - ./:/var/www/html:Z
+      - vendor_data:/var/www/html/vendor
+    depends_on:
+      database:
+        condition: service_healthy
+    command: ["php", "bin/seed.php"]
+    restart: "no"
+
 volumes:
   db_data:
+  vendor_data:

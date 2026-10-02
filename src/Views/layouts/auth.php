@@ -2,7 +2,13 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
+<<<<<<< HEAD
     <title><?= htmlspecialchars($title ?? 'Connexion') ?> — Freelance Manager</title>
+=======
+    <title><?= htmlspecialchars(
+        $title ?? "Connexion",
+    ) ?> — Freelance Manager</title>
+>>>>>>> dccf881 (feat: clean auth and seed)
     <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body class="auth-page">

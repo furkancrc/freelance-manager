@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+<<<<<<< HEAD
 /**
  * Routeur minimal : associe une méthode HTTP + un chemin (avec paramètres
  * `{nom}`) à un callable. Pas de regroupement ni de middleware, volontairement
  * simple pour un projet pédagogique.
  */
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 final class Router
 {
     /** @var array<string, array<string, callable>> */
@@ -16,11 +19,16 @@ final class Router
 
     public function get(string $path, callable $handler): void
     {
+<<<<<<< HEAD
         $this->add('GET', $path, $handler);
+=======
+        $this->add("GET", $path, $handler);
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 
     public function post(string $path, callable $handler): void
     {
+<<<<<<< HEAD
         $this->add('POST', $path, $handler);
     }
 
@@ -32,6 +40,9 @@ final class Router
     public function delete(string $path, callable $handler): void
     {
         $this->add('DELETE', $path, $handler);
+=======
+        $this->add("POST", $path, $handler);
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 
     private function add(string $method, string $path, callable $handler): void
@@ -39,6 +50,7 @@ final class Router
         $this->routes[$method][$path] = $handler;
     }
 
+<<<<<<< HEAD
     /**
      * Résout l'URI courante et exécute le handler associé.
      * Affiche une 404 si aucune route ne correspond.
@@ -47,6 +59,12 @@ final class Router
     {
         $path = rtrim((string) parse_url($uri, PHP_URL_PATH), '/');
         $path = $path === '' ? '/' : $path;
+=======
+    public function dispatch(string $method, string $uri): void
+    {
+        $path = rtrim((string) parse_url($uri, PHP_URL_PATH), "/");
+        $path = $path === "" ? "/" : $path;
+>>>>>>> dccf881 (feat: clean auth and seed)
 
         foreach ($this->routes[$method] ?? [] as $route => $handler) {
             $params = $this->match($route, $path);
@@ -58,6 +76,7 @@ final class Router
         }
 
         http_response_code(404);
+<<<<<<< HEAD
         require __DIR__ . '/../Views/errors/404.php';
     }
 
@@ -68,11 +87,31 @@ final class Router
     {
         $pattern = preg_replace('#\{([a-zA-Z_][a-zA-Z0-9_]*)\}#', '(?P<$1>[^/]+)', $route);
         $pattern = '#^' . $pattern . '$#';
+=======
+        require __DIR__ . "/../Views/errors/404.php";
+    }
+
+    /**
+     * @return array<string, string>|null
+     */
+    private function match(string $route, string $path): ?array
+    {
+        $pattern = preg_replace(
+            "#\{([a-zA-Z_][a-zA-Z0-9_]*)\}#",
+            '(?P<$1>[^/]+)',
+            $route,
+        );
+        $pattern = "#^" . $pattern . '$#';
+>>>>>>> dccf881 (feat: clean auth and seed)
 
         if (preg_match($pattern, $path, $matches) !== 1) {
             return null;
         }
 
+<<<<<<< HEAD
         return array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
+=======
+        return array_filter($matches, "is_string", ARRAY_FILTER_USE_KEY);
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 }

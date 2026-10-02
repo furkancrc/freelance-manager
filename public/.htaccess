@@ -1,9 +1,15 @@
 RewriteEngine On
 
+<<<<<<< HEAD
 # Sert directement les fichiers/dossiers existants (assets, etc.)
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
+<<<<<<< HEAD
 # Tout le reste passe par le front controller
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 RewriteRule ^ index.php [L]

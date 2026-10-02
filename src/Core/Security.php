@@ -4,20 +4,28 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+<<<<<<< HEAD
 /**
  * Session, authentification et protection CSRF.
  *
  * L'utilisateur connecté est stocké dans $_SESSION['user'] sous la forme
  * ['id' => int, 'email' => string, 'role' => string].
  */
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
 final class Security
 {
     public static function startSession(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start([
+<<<<<<< HEAD
                 'cookie_httponly' => true,
                 'cookie_samesite' => 'Lax',
+=======
+                "cookie_httponly" => true,
+                "cookie_samesite" => "Lax",
+>>>>>>> dccf881 (feat: clean auth and seed)
             ]);
         }
     }
@@ -25,10 +33,17 @@ final class Security
     public static function login(array $user): void
     {
         session_regenerate_id(true);
+<<<<<<< HEAD
         $_SESSION['user'] = [
             'id' => $user['id'],
             'email' => $user['email'],
             'role' => $user['role'],
+=======
+        $_SESSION["user"] = [
+            "id" => $user["id"],
+            "email" => $user["email"],
+            "role" => $user["role"],
+>>>>>>> dccf881 (feat: clean auth and seed)
         ];
     }
 
@@ -40,7 +55,11 @@ final class Security
 
     public static function currentUser(): ?array
     {
+<<<<<<< HEAD
         return $_SESSION['user'] ?? null;
+=======
+        return $_SESSION["user"] ?? null;
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 
     public static function isLoggedIn(): bool
@@ -48,24 +67,36 @@ final class Security
         return self::currentUser() !== null;
     }
 
+<<<<<<< HEAD
     /** Redirige vers /login si l'utilisateur n'est pas connecté. */
     public static function requireAuth(): void
     {
         if (!self::isLoggedIn()) {
             header('Location: /login');
             exit;
+=======
+    public static function requireAuth(): void
+    {
+        if (!self::isLoggedIn()) {
+            header("Location: /login");
+            exit();
+>>>>>>> dccf881 (feat: clean auth and seed)
         }
     }
 
     /**
+<<<<<<< HEAD
      * Vérifie que l'utilisateur est connecté ET a l'un des rôles autorisés.
      *
+=======
+>>>>>>> dccf881 (feat: clean auth and seed)
      * @param string[] $roles
      */
     public static function requireRole(array $roles): void
     {
         self::requireAuth();
 
+<<<<<<< HEAD
         if (!in_array(self::currentUser()['role'], $roles, true)) {
             http_response_code(403);
             exit('Accès refusé : rôle insuffisant.');
@@ -115,12 +146,33 @@ final class Security
         }
 
         return $_SESSION['csrf_token'];
+=======
+        if (!in_array(self::currentUser()["role"], $roles, true)) {
+            http_response_code(403);
+            exit("Accès refusé : rôle insuffisant.");
+        }
+    }
+
+    public static function csrfToken(): string
+    {
+        if (empty($_SESSION["csrf_token"])) {
+            $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION["csrf_token"];
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 
     public static function verifyCsrf(?string $token): bool
     {
+<<<<<<< HEAD
         return $token !== null
             && !empty($_SESSION['csrf_token'])
             && hash_equals($_SESSION['csrf_token'], $token);
+=======
+        return $token !== null &&
+            !empty($_SESSION["csrf_token"]) &&
+            hash_equals($_SESSION["csrf_token"], $token);
+>>>>>>> dccf881 (feat: clean auth and seed)
     }
 }

@@ -8,15 +8,24 @@ use PDO;
 
 final class User
 {
+<<<<<<< HEAD
     public function __construct(private PDO $pdo)
     {
     }
+=======
+    public function __construct(private PDO $pdo) {}
+>>>>>>> dccf881 (feat: clean auth and seed)
 
     /** @return array{id: int, email: string, password_hash: string, role: string, is_active: int}|null */
     public function findByEmail(string $email): ?array
     {
+<<<<<<< HEAD
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
         $stmt->execute(['email' => $email]);
+=======
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(["email" => $email]);
+>>>>>>> dccf881 (feat: clean auth and seed)
 
         $user = $stmt->fetch();
 
@@ -25,8 +34,13 @@ final class User
 
     public function findById(int $id): ?array
     {
+<<<<<<< HEAD
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE id = :id');
         $stmt->execute(['id' => $id]);
+=======
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute(["id" => $id]);
+>>>>>>> dccf881 (feat: clean auth and seed)
 
         $user = $stmt->fetch();
 
