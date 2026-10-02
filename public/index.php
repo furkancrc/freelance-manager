@@ -7,12 +7,19 @@ require __DIR__ . "/../vendor/autoload.php";
 use App\Controllers\AuthController;
 use App\Controllers\CandidatureController;
 use App\Controllers\FreelanceController;
+use App\Core\Database;
 use App\Core\Router;
 use App\Core\Security;
+use App\Models\Candidature;
+use App\Models\Freelance;
+use App\Models\Review;
+use App\Models\User;
 
 Security::startSession();
 
 $router = new Router();
+
+$pdo = Database::getConnection();
 
 $router->get("/", function (): void {
     Security::requireAuth();
@@ -20,52 +27,66 @@ $router->get("/", function (): void {
     require __DIR__ . "/../src/Views/home/index.php";
 });
 
-$router->get("/login", function (): void {
-    new AuthController()->showLogin();
+$router->get("/login", function () use ($pdo): void {
+    new AuthController(new User($pdo))->showLogin();
 });
 
-$router->post("/login", function (): void {
-    new AuthController()->login();
+$router->post("/login", function () use ($pdo): void {
+    new AuthController(new User($pdo))->login();
 });
 
-$router->post("/logout", function (): void {
-    new AuthController()->logout();
+$router->post("/logout", function () use ($pdo): void {
+    new AuthController(new User($pdo))->logout();
 });
 
-$router->get("/freelances", function (): void {
-    new FreelanceController()->index();
+$router->get("/freelances", function () use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->index();
 });
 
-$router->post("/freelances", function (): void {
-    new FreelanceController()->store();
+$router->post("/freelances", function () use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->store();
 });
 
-$router->get("/freelances/{id}", function (string $id): void {
-    new FreelanceController()->show((int) $id);
+$router->get("/freelances/{id}", function (string $id) use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->show(
+        (int) $id,
+    );
 });
 
-$router->put("/freelances/{id}", function (string $id): void {
-    new FreelanceController()->update((int) $id);
+$router->put("/freelances/{id}", function (string $id) use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->update(
+        (int) $id,
+    );
 });
 
-$router->delete("/freelances/{id}", function (string $id): void {
-    new FreelanceController()->destroy((int) $id);
+$router->delete("/freelances/{id}", function (string $id) use ($pdo): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->destroy(
+        (int) $id,
+    );
 });
 
-$router->post("/freelances/{id}/reviews", function (string $id): void {
-    new FreelanceController()->addReview((int) $id);
+$router->post("/freelances/{id}/reviews", function (string $id) use (
+    $pdo,
+): void {
+    new FreelanceController(new Freelance($pdo), new Review($pdo))->addReview(
+        (int) $id,
+    );
 });
 
-$router->post("/missions/{id}/applications", function (string $id): void {
-    new CandidatureController()->store((int) $id);
+$router->post("/missions/{id}/applications", function (string $id) use (
+    $pdo,
+): void {
+    new CandidatureController(new Candidature($pdo))->store((int) $id);
 });
 
-$router->get("/applications/me", function (): void {
-    new CandidatureController()->mine();
+$router->get("/applications/me", function () use ($pdo): void {
+    new CandidatureController(new Candidature($pdo))->mine();
 });
 
-$router->get("/missions/{id}/applications", function (string $id): void {
-    new CandidatureController()->forMission((int) $id);
+$router->get("/missions/{id}/applications", function (string $id) use (
+    $pdo,
+): void {
+    new CandidatureController(new Candidature($pdo))->forMission((int) $id);
 });
 
 $router->get("/mentions-legales", function (): void {

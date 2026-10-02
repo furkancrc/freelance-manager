@@ -4,18 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Core\Database;
 use App\Core\Security;
 use App\Models\User;
 
 final class AuthController
 {
-    private User $users;
-
-    public function __construct()
-    {
-        $this->users = new User(Database::getConnection());
-    }
+    public function __construct(private User $users) {}
 
     public function showLogin(): void
     {
@@ -23,7 +17,6 @@ final class AuthController
             header("Location: /");
             exit();
         }
-
         $this->renderLogin();
     }
 
@@ -32,13 +25,11 @@ final class AuthController
         if (!Security::verifyCsrf($_POST["csrf_token"] ?? null)) {
             http_response_code(400);
             $this->renderLogin("Requête invalide, merci de réessayer.");
-
             return;
         }
 
         $email = trim((string) ($_POST["email"] ?? ""));
         $password = (string) ($_POST["password"] ?? "");
-
         $user = $email === "" ? null : $this->users->findByEmail($email);
 
         if (
@@ -46,13 +37,11 @@ final class AuthController
             !password_verify($password, $user["password_hash"])
         ) {
             $this->renderLogin("Email ou mot de passe incorrect.");
-
             return;
         }
 
         if ((int) $user["is_active"] === 0) {
             $this->renderLogin("Ce compte est désactivé.");
-
             return;
         }
 

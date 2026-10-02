@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use DomainException;
 use PDO;
+use PDOException;
 
 final class Freelance
 {
     public function __construct(private PDO $pdo) {}
 
-    /**
-     * @param array{q?: ?string, availability?: ?string, location?: ?string, min_rate?: ?string, max_rate?: ?string} $filters
-     * @return array<int, array<string, mixed>>
-     */
     public function search(array $filters): array
     {
         $sql =
@@ -23,10 +21,8 @@ final class Freelance
         if (!empty($filters["q"])) {
             $sql .=
                 " AND (f.first_name LIKE :q1 OR f.last_name LIKE :q2 OR f.title LIKE :q3)";
-            $needle = "%" . $filters["q"] . "%";
-            $params["q1"] = $needle;
-            $params["q2"] = $needle;
-            $params["q3"] = $needle;
+            $params["q1"] = $params["q2"] = $params["q3"] =
+                "%" . $filters["q"] . "%";
         }
 
         if (!empty($filters["availability"])) {
@@ -49,9 +45,9 @@ final class Freelance
             $params["max_rate"] = $filters["max_rate"];
         }
 
-        $sql .= " ORDER BY f.last_name, f.first_name";
-
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare(
+            $sql . " ORDER BY f.last_name, f.first_name",
+        );
         $stmt->execute($params);
 
         return $stmt->fetchAll();
@@ -63,15 +59,11 @@ final class Freelance
             "SELECT f.*, u.email FROM freelances f JOIN users u ON u.id = f.user_id WHERE f.id = :id",
         );
         $stmt->execute(["id" => $id]);
-
         $freelance = $stmt->fetch();
 
         return $freelance === false ? null : $freelance;
     }
 
-    /**
-     * @param array{email: string, password: string, first_name: string, last_name: string, title?: ?string, bio?: ?string, daily_rate?: ?string, availability?: ?string, location?: ?string} $data
-     */
     public function create(array $data): int
     {
         $this->pdo->beginTransaction();
@@ -87,6 +79,7 @@ final class Freelance
                     PASSWORD_DEFAULT,
                 ),
             ]);
+
             $userId = (int) $this->pdo->lastInsertId();
 
             $freelanceStmt = $this->pdo->prepare(
@@ -103,21 +96,20 @@ final class Freelance
                 "availability" => $data["availability"] ?? "available",
                 "location" => $data["location"] ?? null,
             ]);
-            $freelanceId = (int) $this->pdo->lastInsertId();
 
+            $freelanceId = (int) $this->pdo->lastInsertId();
             $this->pdo->commit();
 
             return $freelanceId;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $this->pdo->rollBack();
-
+            if ($e->getCode() === "23000") {
+                throw new DomainException("Cet email est déjà utilisé.", 409);
+            }
             throw $e;
         }
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
     public function update(int $id, array $data): bool
     {
         $allowed = [
@@ -129,9 +121,9 @@ final class Freelance
             "availability",
             "location",
         ];
-
         $set = [];
         $params = ["id" => $id];
+
         foreach ($allowed as $field) {
             if (array_key_exists($field, $data)) {
                 $set[] = "$field = :$field";

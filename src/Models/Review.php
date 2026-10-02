@@ -6,6 +6,7 @@ namespace App\Models;
 
 use DomainException;
 use PDO;
+use PDOException;
 
 final class Review
 {
@@ -21,6 +22,7 @@ final class Review
         if ($rating < 1 || $rating > 5) {
             throw new DomainException(
                 "La note doit être comprise entre 1 et 5.",
+                422,
             );
         }
 
@@ -31,7 +33,7 @@ final class Review
         $managerId = $managerStmt->fetchColumn();
 
         if ($managerId === false) {
-            throw new DomainException("Profil manager introuvable.");
+            throw new DomainException("Profil manager introuvable.", 404);
         }
 
         $missionStmt = $this->pdo->prepare(
@@ -41,48 +43,60 @@ final class Review
         $mission = $missionStmt->fetch();
 
         if ($mission === false) {
-            throw new DomainException("Mission introuvable.");
+            throw new DomainException("Mission introuvable.", 404);
         }
 
         if ((int) $mission["manager_id"] !== (int) $managerId) {
             throw new DomainException(
                 "Cette mission n'appartient pas à ce manager.",
+                403,
             );
         }
 
         if ($mission["status"] !== "closed") {
             throw new DomainException(
                 "Seules les missions terminées peuvent être évaluées.",
+                422,
             );
         }
 
-        $applicationStmt = $this->pdo->prepare(
-            "SELECT 1 FROM applications
-             WHERE mission_id = :mission_id AND freelance_id = :freelance_id AND status = 'accepted'",
+        $appStmt = $this->pdo->prepare(
+            "SELECT 1 FROM applications WHERE mission_id = :mission_id AND freelance_id = :freelance_id AND status = 'accepted'",
         );
-        $applicationStmt->execute([
+        $appStmt->execute([
             "mission_id" => $missionId,
             "freelance_id" => $freelanceId,
         ]);
 
-        if ($applicationStmt->fetchColumn() === false) {
+        if ($appStmt->fetchColumn() === false) {
             throw new DomainException(
                 "Ce freelance n'a pas de candidature acceptée sur cette mission.",
+                422,
             );
         }
 
-        $insert = $this->pdo->prepare(
-            'INSERT INTO reviews (freelance_id, manager_id, mission_id, rating, comment)
-             VALUES (:freelance_id, :manager_id, :mission_id, :rating, :comment)',
-        );
-        $insert->execute([
-            "freelance_id" => $freelanceId,
-            "manager_id" => $managerId,
-            "mission_id" => $missionId,
-            "rating" => $rating,
-            "comment" => $comment,
-        ]);
+        try {
+            $insert = $this->pdo->prepare(
+                'INSERT INTO reviews (freelance_id, manager_id, mission_id, rating, comment)
+                 VALUES (:freelance_id, :manager_id, :mission_id, :rating, :comment)',
+            );
+            $insert->execute([
+                "freelance_id" => $freelanceId,
+                "manager_id" => $managerId,
+                "mission_id" => $missionId,
+                "rating" => $rating,
+                "comment" => $comment,
+            ]);
 
-        return (int) $this->pdo->lastInsertId();
+            return (int) $this->pdo->lastInsertId();
+        } catch (PDOException $e) {
+            if ($e->getCode() === "23000") {
+                throw new DomainException(
+                    "Ce freelance a déjà été évalué pour cette mission.",
+                    409,
+                );
+            }
+            throw $e;
+        }
     }
 }

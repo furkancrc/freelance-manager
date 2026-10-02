@@ -6,6 +6,7 @@ namespace App\Models;
 
 use DomainException;
 use PDO;
+use PDOException;
 
 final class Candidature
 {
@@ -19,7 +20,7 @@ final class Candidature
     ): int {
         $freelanceId = $this->freelanceIdForUser($freelanceUserId);
         if ($freelanceId === null) {
-            throw new DomainException("Profil freelance introuvable.");
+            throw new DomainException("Profil freelance introuvable.", 404);
         }
 
         $stmt = $this->pdo->prepare(
@@ -29,32 +30,40 @@ final class Candidature
         $status = $stmt->fetchColumn();
 
         if ($status === false) {
-            throw new DomainException("Mission introuvable.");
+            throw new DomainException("Mission introuvable.", 404);
         }
 
         if ($status !== "open") {
             throw new DomainException(
                 "Cette mission n'accepte plus de candidatures.",
+                422,
             );
         }
 
-        $insert = $this->pdo->prepare(
-            'INSERT INTO applications (mission_id, freelance_id, message, proposed_rate)
-             VALUES (:mission_id, :freelance_id, :message, :proposed_rate)',
-        );
-        $insert->execute([
-            "mission_id" => $missionId,
-            "freelance_id" => $freelanceId,
-            "message" => $message,
-            "proposed_rate" => $proposedRate,
-        ]);
+        try {
+            $insert = $this->pdo->prepare(
+                'INSERT INTO applications (mission_id, freelance_id, message, proposed_rate)
+                 VALUES (:mission_id, :freelance_id, :message, :proposed_rate)',
+            );
+            $insert->execute([
+                "mission_id" => $missionId,
+                "freelance_id" => $freelanceId,
+                "message" => $message,
+                "proposed_rate" => $proposedRate,
+            ]);
 
-        return (int) $this->pdo->lastInsertId();
+            return (int) $this->pdo->lastInsertId();
+        } catch (PDOException $e) {
+            if ($e->getCode() === "23000") {
+                throw new DomainException(
+                    "Vous avez déjà postulé à cette mission.",
+                    409,
+                );
+            }
+            throw $e;
+        }
     }
 
-    /**
-     * @return array<int, array<string, mixed>>
-     */
     public function listForFreelanceUser(
         int $freelanceUserId,
         ?string $status = null,
@@ -65,6 +74,7 @@ final class Candidature
                 JOIN freelances f ON f.id = a.freelance_id
                 JOIN missions m ON m.id = a.mission_id
                 WHERE f.user_id = :user_id';
+
         $params = ["user_id" => $freelanceUserId];
 
         if ($status !== null) {
@@ -78,9 +88,6 @@ final class Candidature
         return $stmt->fetchAll();
     }
 
-    /**
-     * @return array<int, array<string, mixed>>
-     */
     public function listForMission(
         int $missionId,
         ?string $status = null,
@@ -91,6 +98,7 @@ final class Candidature
                 JOIN freelances f ON f.id = a.freelance_id
                 JOIN users u ON u.id = f.user_id
                 WHERE a.mission_id = :mission_id';
+
         $params = ["mission_id" => $missionId];
 
         if ($status !== null) {
