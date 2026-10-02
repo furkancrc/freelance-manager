@@ -103,7 +103,6 @@ final class Security
         }
     }
 
-    /** Variante JSON de requireAuth : renvoie 401 au lieu de rediriger. */
     public static function requireJsonAuth(): array
     {
         $user = self::currentUser();
@@ -115,8 +114,6 @@ final class Security
     }
 
     /**
-     * Variante JSON de requireRole : renvoie 401/403 au lieu de rediriger.
-     *
      * @param string[] $roles
      */
     public static function requireJsonRole(array $roles): array
