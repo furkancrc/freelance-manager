@@ -15,6 +15,7 @@ use App\Controllers\FreelanceController;
 require __DIR__ . "/../vendor/autoload.php";
 
 use App\Controllers\AuthController;
+<<<<<<< HEAD
 >>>>>>> dccf881 (feat: clean auth and seed)
 =======
 use App\Controllers\ManagerController;
@@ -27,6 +28,9 @@ use App\Core\Database;
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\AuthController;
+=======
+use App\Controllers\CandidatureController;
+>>>>>>> f762781 (feat: cleanup candidature & legals)
 use App\Controllers\FreelanceController;
 use App\Core\Router;
 use App\Core\Security;
@@ -144,6 +148,7 @@ $router->post("/freelances/{id}/reviews", function (string $id): void {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 $router->get("/test-manager", function () use ($dbConnection): void {
     $dbConnection = Database::getConnection();
     
@@ -153,6 +158,8 @@ $router->get("/test-manager", function () use ($dbConnection): void {
 
 >>>>>>> d4d35fc (CRUD manager)
 =======
+=======
+>>>>>>> f762781 (feat: cleanup candidature & legals)
 $router->post("/missions/{id}/applications", function (string $id): void {
     new CandidatureController()->store((int) $id);
 });
@@ -169,6 +176,9 @@ $router->get("/mentions-legales", function (): void {
     require __DIR__ . "/../src/Views/legals/index.php";
 });
 
+<<<<<<< HEAD
+>>>>>>> f762781 (feat: cleanup candidature & legals)
+=======
 >>>>>>> f762781 (feat: cleanup candidature & legals)
 $router->dispatch($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
 >>>>>>> dccf881 (feat: clean auth and seed)
