@@ -6,6 +6,7 @@ require __DIR__ . "/../vendor/autoload.php";
 
 use App\Controllers\AuthController;
 use App\Controllers\CandidatureController;
+use App\Controllers\FavoriteController;
 use App\Controllers\FreelanceController;
 use App\Controllers\ManagerController;
 use App\Controllers\MissionController;
@@ -13,6 +14,7 @@ use App\Core\Database;
 use App\Core\Router;
 use App\Core\Security;
 use App\Models\Candidature;
+use App\Models\Favorite;
 use App\Models\Freelance;
 use App\Models\Manager;
 use App\Models\Mission;
@@ -126,6 +128,22 @@ $router->get("/missions/{id}/applications", function (string $id) use (
     $pdo,
 ): void {
     new CandidatureController(new Candidature($pdo))->forMission((int) $id);
+});
+
+$router->post("/missions/{id}/favorites", function (string $id) use (
+    $pdo,
+): void {
+    new FavoriteController(new Favorite($pdo))->add((int) $id);
+});
+
+$router->delete("/missions/{id}/favorites", function (string $id) use (
+    $pdo,
+): void {
+    new FavoriteController(new Favorite($pdo))->remove((int) $id);
+});
+
+$router->get("/favorites", function () use ($pdo): void {
+    new FavoriteController(new Favorite($pdo))->index();
 });
 
 $router->get("/mentions-legales", function (): void {
