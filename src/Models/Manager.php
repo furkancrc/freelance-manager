@@ -12,31 +12,63 @@ final class Manager
 {
     public function __construct(private PDO $pdo) {}
 
-    public function create(
-        int $userId,
-        string $firstName,
-        string $lastName,
-        string $department,
-        string $phone,
-    ): bool {
-        $stmt = $this->pdo->prepare(
-            'INSERT INTO managers (user_id, first_name, last_name, department, phone)
-             VALUES (:user_id, :first_name, :last_name, :department, :phone)',
+    /** @return array<int, array<string, mixed>> */
+    public function all(): array
+    {
+        $stmt = $this->pdo->query(
+            "SELECT m.*, u.email FROM managers m JOIN users u ON u.id = m.user_id ORDER BY m.last_name, m.first_name",
         );
 
-        return $stmt->execute([
-            "user_id" => $userId,
-            "first_name" => $firstName,
-            "last_name" => $lastName,
-            "department" => $department,
-            "phone" => $phone,
-        ]);
+        return $stmt->fetchAll();
+    }
+
+    /** Crée le compte utilisateur et le profil manager, renvoie le user_id. */
+    public function create(array $data): int
+    {
+        $this->pdo->beginTransaction();
+
+        try {
+            $userStmt = $this->pdo->prepare(
+                "INSERT INTO users (email, password_hash, role, is_active) VALUES (:email, :password_hash, 'manager', 1)",
+            );
+            $userStmt->execute([
+                "email" => $data["email"],
+                "password_hash" => password_hash(
+                    $data["password"],
+                    PASSWORD_DEFAULT,
+                ),
+            ]);
+
+            $userId = (int) $this->pdo->lastInsertId();
+
+            $managerStmt = $this->pdo->prepare(
+                'INSERT INTO managers (user_id, first_name, last_name, department, phone)
+                 VALUES (:user_id, :first_name, :last_name, :department, :phone)',
+            );
+            $managerStmt->execute([
+                "user_id" => $userId,
+                "first_name" => $data["first_name"],
+                "last_name" => $data["last_name"],
+                "department" => $data["department"] ?? null,
+                "phone" => $data["phone"] ?? null,
+            ]);
+
+            $this->pdo->commit();
+
+            return $userId;
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            if ($e->getCode() === "23000") {
+                throw new DomainException("Cet email est déjà utilisé.", 409);
+            }
+            throw $e;
+        }
     }
 
     public function findByUserId(int $userId): ?array
     {
         $stmt = $this->pdo->prepare(
-            "SELECT * FROM managers WHERE user_id = :user_id",
+            "SELECT m.*, u.email FROM managers m JOIN users u ON u.id = m.user_id WHERE m.user_id = :user_id",
         );
         $stmt->execute(["user_id" => $userId]);
         $manager = $stmt->fetch();

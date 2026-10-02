@@ -12,10 +12,45 @@ final class Freelance
 {
     public function __construct(private PDO $pdo) {}
 
-    public function search(array $filters): array
-    {
+    /** SF2 + SF19 : $limit = 0 renvoie tous les résultats. */
+    public function search(
+        array $filters,
+        int $limit = 0,
+        int $offset = 0,
+    ): array {
+        [$where, $params] = $this->filters($filters);
+
         $sql =
-            "SELECT f.*, u.email FROM freelances f JOIN users u ON u.id = f.user_id WHERE 1=1";
+            "SELECT f.*, u.email FROM freelances f JOIN users u ON u.id = f.user_id WHERE 1=1" .
+            $where .
+            " ORDER BY f.last_name, f.first_name";
+
+        if ($limit > 0) {
+            $sql .= " LIMIT " . $limit . " OFFSET " . $offset;
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll();
+    }
+
+    public function count(array $filters): int
+    {
+        [$where, $params] = $this->filters($filters);
+
+        $stmt = $this->pdo->prepare(
+            "SELECT COUNT(*) FROM freelances f WHERE 1=1" . $where,
+        );
+        $stmt->execute($params);
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    /** @return array{0: string, 1: array<string, mixed>} */
+    private function filters(array $filters): array
+    {
+        $sql = "";
         $params = [];
 
         if (!empty($filters["q"])) {
@@ -45,12 +80,7 @@ final class Freelance
             $params["max_rate"] = $filters["max_rate"];
         }
 
-        $stmt = $this->pdo->prepare(
-            $sql . " ORDER BY f.last_name, f.first_name",
-        );
-        $stmt->execute($params);
-
-        return $stmt->fetchAll();
+        return [$sql, $params];
     }
 
     public function find(int $id): ?array
@@ -59,6 +89,17 @@ final class Freelance
             "SELECT f.*, u.email FROM freelances f JOIN users u ON u.id = f.user_id WHERE f.id = :id",
         );
         $stmt->execute(["id" => $id]);
+        $freelance = $stmt->fetch();
+
+        return $freelance === false ? null : $freelance;
+    }
+
+    public function findByUserId(int $userId): ?array
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT f.*, u.email FROM freelances f JOIN users u ON u.id = f.user_id WHERE f.user_id = :user_id",
+        );
+        $stmt->execute(["user_id" => $userId]);
         $freelance = $stmt->fetch();
 
         return $freelance === false ? null : $freelance;

@@ -11,10 +11,47 @@ final class Mission
 {
     public function __construct(private PDO $pdo) {}
 
-    /** @return array<int, array<string, mixed>> */
-    public function search(array $filters): array
+    /**
+     * SF7 + SF19 : $limit = 0 renvoie tous les résultats.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function search(
+        array $filters,
+        int $limit = 0,
+        int $offset = 0,
+    ): array {
+        [$where, $params] = $this->filters($filters);
+
+        $sql =
+            "SELECT * FROM missions WHERE 1=1" . $where . " ORDER BY created_at DESC";
+
+        if ($limit > 0) {
+            $sql .= " LIMIT " . $limit . " OFFSET " . $offset;
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll();
+    }
+
+    public function count(array $filters): int
     {
-        $sql = "SELECT * FROM missions WHERE 1=1";
+        [$where, $params] = $this->filters($filters);
+
+        $stmt = $this->pdo->prepare(
+            "SELECT COUNT(*) FROM missions WHERE 1=1" . $where,
+        );
+        $stmt->execute($params);
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    /** @return array{0: string, 1: array<string, mixed>} */
+    private function filters(array $filters): array
+    {
+        $sql = "";
         $params = [];
 
         if (!empty($filters["q"])) {
@@ -32,10 +69,13 @@ final class Mission
             $params["location"] = "%" . $filters["location"] . "%";
         }
 
-        $stmt = $this->pdo->prepare($sql . " ORDER BY created_at DESC");
-        $stmt->execute($params);
+        if (!empty($filters["manager_user_id"])) {
+            $sql .=
+                " AND manager_id = (SELECT id FROM managers WHERE user_id = :manager_user_id)";
+            $params["manager_user_id"] = $filters["manager_user_id"];
+        }
 
-        return $stmt->fetchAll();
+        return [$sql, $params];
     }
 
     public function find(int $id): ?array

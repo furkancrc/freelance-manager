@@ -12,6 +12,22 @@ final class Review
 {
     public function __construct(private PDO $pdo) {}
 
+    /** @return array<int, array<string, mixed>> */
+    public function listForFreelance(int $freelanceId): array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT r.*, m.title AS mission_title, mg.first_name AS manager_first_name, mg.last_name AS manager_last_name
+             FROM reviews r
+             JOIN missions m ON m.id = r.mission_id
+             JOIN managers mg ON mg.id = r.manager_id
+             WHERE r.freelance_id = :freelance_id
+             ORDER BY r.created_at DESC',
+        );
+        $stmt->execute(["freelance_id" => $freelanceId]);
+
+        return $stmt->fetchAll();
+    }
+
     public function create(
         int $managerUserId,
         int $freelanceId,
