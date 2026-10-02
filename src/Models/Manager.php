@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use DomainException;
 use PDO;
+use PDOException;
 
 final class Manager
 {
@@ -64,18 +66,27 @@ final class Manager
             implode(", ", $set) .
             " WHERE user_id = :user_id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
 
-        return $stmt->rowCount() > 0;
+        return $stmt->execute($params);
     }
 
     public function delete(int $userId): bool
     {
-        $stmt = $this->pdo->prepare(
-            "DELETE FROM managers WHERE user_id = :user_id",
-        );
-        $stmt->execute(["user_id" => $userId]);
+        try {
+            $stmt = $this->pdo->prepare(
+                "DELETE FROM users WHERE id = :user_id AND role = 'manager'",
+            );
+            $stmt->execute(["user_id" => $userId]);
 
-        return $stmt->rowCount() > 0;
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            if ($e->getCode() === "23000") {
+                throw new DomainException(
+                    "Ce manager a encore des missions, impossible de le supprimer.",
+                    409,
+                );
+            }
+            throw $e;
+        }
     }
 }

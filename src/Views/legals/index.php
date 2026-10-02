@@ -1,4 +1,6 @@
-<main class="container">
+<?php
+ob_start(); ?>
+<div class="container">
     <h1>Mentions Légales</h1>
 
     <section>
@@ -36,4 +38,8 @@
             Dans le cadre de la fonctionnalité "Plateforme de gestion des missions freelance en entreprise", ce site simule la collecte de données personnelles (noms, prénoms, adresses email). Ces données sont fictives ou générées pour les besoins de l'évaluation (seed) et ne font l'objet d'aucun traitement commercial.
         </p>
     </section>
-</main>
+</div>
+<?php
+$content = ob_get_clean();
+$title = "Mentions Légales";
+require __DIR__ . "/../layouts/main.php";
