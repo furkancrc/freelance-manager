@@ -4,18 +4,37 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use DomainException;
 use PDO;
 
-class Mission
+final class Mission
 {
     public function __construct(private PDO $pdo) {}
 
     /** @return array<int, array<string, mixed>> */
-    public function all(): array
+    public function search(array $filters): array
     {
-        $stmt = $this->pdo->query(
-            "SELECT * FROM missions ORDER BY created_at DESC",
-        );
+        $sql = "SELECT * FROM missions WHERE 1=1";
+        $params = [];
+
+        if (!empty($filters["q"])) {
+            $sql .= " AND (title LIKE :q1 OR description LIKE :q2)";
+            $params["q1"] = $params["q2"] = "%" . $filters["q"] . "%";
+        }
+
+        if (!empty($filters["status"])) {
+            $sql .= " AND status = :status";
+            $params["status"] = $filters["status"];
+        }
+
+        if (!empty($filters["location"])) {
+            $sql .= " AND location LIKE :location";
+            $params["location"] = "%" . $filters["location"] . "%";
+        }
+
+        $stmt = $this->pdo->prepare($sql . " ORDER BY created_at DESC");
+        $stmt->execute($params);
+
         return $stmt->fetchAll();
     }
 
@@ -28,8 +47,13 @@ class Mission
         return $mission === false ? null : $mission;
     }
 
-    public function create(int $managerId, array $data): int
+    public function create(int $managerUserId, array $data): int
     {
+        $managerId = $this->managerIdForUser($managerUserId);
+        if ($managerId === null) {
+            throw new DomainException("Profil manager introuvable.", 404);
+        }
+
         $stmt = $this->pdo->prepare(
             'INSERT INTO missions (manager_id, title, description, budget, daily_rate, start_date, end_date, location, status, created_at)
              VALUES (:manager_id, :title, :description, :budget, :daily_rate, :start_date, :end_date, :location, :status, NOW())',
@@ -38,7 +62,7 @@ class Mission
         $stmt->execute([
             "manager_id" => $managerId,
             "title" => $data["title"],
-            "description" => $data["description"] ?? null,
+            "description" => $data["description"],
             "budget" => $data["budget"],
             "daily_rate" => $data["daily_rate"],
             "start_date" => $data["start_date"],
@@ -78,9 +102,8 @@ class Mission
 
         $sql = "UPDATE missions SET " . implode(", ", $set) . " WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
 
-        return $stmt->rowCount() > 0;
+        return $stmt->execute($params);
     }
 
     public function delete(int $id): bool
@@ -91,11 +114,32 @@ class Mission
         return $stmt->rowCount() > 0;
     }
 
+    public function isOwnedBy(int $id, int $managerUserId): bool
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT 1 FROM missions m JOIN managers mg ON mg.id = m.manager_id WHERE m.id = :id AND mg.user_id = :user_id",
+        );
+        $stmt->execute(["id" => $id, "user_id" => $managerUserId]);
+
+        return $stmt->fetchColumn() !== false;
+    }
+
     public function statistics(): array
     {
         $stmt = $this->pdo->query(
             "SELECT COUNT(*) as total_missions, AVG(budget) as avg_budget FROM missions",
         );
         return $stmt->fetch();
+    }
+
+    private function managerIdForUser(int $userId): ?int
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT id FROM managers WHERE user_id = :user_id",
+        );
+        $stmt->execute(["user_id" => $userId]);
+        $id = $stmt->fetchColumn();
+
+        return $id === false ? null : (int) $id;
     }
 }
