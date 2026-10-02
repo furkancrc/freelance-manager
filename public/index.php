@@ -5,6 +5,7 @@ declare(strict_types=1);
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\AuthController;
+use App\Controllers\FreelanceController;
 use App\Core\Router;
 use App\Core\Security;
 
@@ -28,6 +29,30 @@ $router->post('/login', function (): void {
 
 $router->post('/logout', function (): void {
     (new AuthController())->logout();
+});
+
+$router->get('/freelances', function (): void {
+    (new FreelanceController())->index();
+});
+
+$router->post('/freelances', function (): void {
+    (new FreelanceController())->store();
+});
+
+$router->get('/freelances/{id}', function (string $id): void {
+    (new FreelanceController())->show((int) $id);
+});
+
+$router->put('/freelances/{id}', function (string $id): void {
+    (new FreelanceController())->update((int) $id);
+});
+
+$router->delete('/freelances/{id}', function (string $id): void {
+    (new FreelanceController())->destroy((int) $id);
+});
+
+$router->post('/freelances/{id}/reviews', function (string $id): void {
+    (new FreelanceController())->addReview((int) $id);
 });
 
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
