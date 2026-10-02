@@ -7,6 +7,7 @@ require __DIR__ . "/../vendor/autoload.php";
 use App\Controllers\AuthController;
 use App\Controllers\CandidatureController;
 use App\Controllers\FreelanceController;
+use App\Controllers\ManagerController;
 use App\Core\Database;
 use App\Core\Router;
 use App\Core\Security;
@@ -71,6 +72,12 @@ $router->post("/freelances/{id}/reviews", function (string $id) use (
     new FreelanceController(new Freelance($pdo), new Review($pdo))->addReview(
         (int) $id,
     );
+});
+
+$router->get("/test-manager", function (): void {
+    $dbConnection = Database::getConnection();
+    $controller = new ManagerController($dbConnection);
+    $controller->testCreate();
 });
 
 $router->post("/missions/{id}/applications", function (string $id) use (
