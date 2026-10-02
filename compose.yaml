@@ -29,6 +29,11 @@ services:
       - ./:/var/www/html:Z
     environment:
       PHP_DISPLAY_ERRORS: "1"
+      DB_HOST: database
+      DB_PORT: "3306"
+      DB_NAME: freelance_manager
+      DB_USER: root
+      DB_PASS: ""
     depends_on:
       - database
 
