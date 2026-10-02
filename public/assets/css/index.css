@@ -18,8 +18,9 @@
     --danger: #b3261e;
     --warning: #b07800;
 
-    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+    --sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --label: var(--sans);
 
     --radius: 3px;
     --speed: 120ms;
@@ -47,6 +48,7 @@ body {
 h1,
 h2 {
     margin: 0;
+    font-family: var(--serif);
     font-weight: 600;
     line-height: 1.2;
 }
@@ -106,7 +108,7 @@ a:hover {
 .page {
     padding-top: 24px;
     padding-bottom: 56px;
-    min-height: calc(100vh - 160px);
+    min-height: calc(100vh - 220px);
 }
 
 .topbar {
@@ -125,7 +127,7 @@ a:hover {
 
 .brand {
     margin: 0;
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.04em;
@@ -158,7 +160,7 @@ a:hover {
     padding: 1px 6px;
     border: 1px solid var(--rule-strong);
     border-radius: var(--radius);
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -190,6 +192,7 @@ a:hover {
 }
 
 .footer {
+    margin-top: 56px;
     border-top: 1px solid var(--rule);
     color: var(--muted);
     font-size: 13px;
@@ -199,8 +202,8 @@ a:hover {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding-top: 20px;
-    padding-bottom: 32px;
+    padding-top: 28px;
+    padding-bottom: 48px;
 }
 
 .footer a {
@@ -225,7 +228,7 @@ a:hover {
 .eyebrow,
 .back {
     margin: 0 0 8px;
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 12px;
     letter-spacing: 0.04em;
     color: var(--muted);
@@ -397,7 +400,7 @@ input[type="checkbox"] {
 .field > span {
     display: block;
     margin-bottom: 6px;
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -482,7 +485,7 @@ input[type="checkbox"] {
 .list td[data-label]::before {
     content: attr(data-label);
     flex-shrink: 0;
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -506,7 +509,7 @@ input[type="checkbox"] {
 }
 
 .num {
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 13px;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
@@ -533,7 +536,7 @@ input[type="checkbox"] {
     align-items: center;
     gap: 12px;
     margin-top: 20px;
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 12px;
 }
 
@@ -578,7 +581,7 @@ input[type="checkbox"] {
 
 .meta dt {
     padding-top: 2px;
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -626,7 +629,7 @@ input[type="checkbox"] {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -710,7 +713,7 @@ input[type="checkbox"] {
 .auth-box label {
     display: block;
     margin-bottom: 6px;
-    font-family: var(--mono);
+    font-family: var(--label);
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -871,7 +874,7 @@ input[type="checkbox"] {
     .list th {
         padding: 10px 16px 8px 0;
         border-bottom: 1px solid var(--ink);
-        font-family: var(--mono);
+        font-family: var(--label);
         font-size: 11px;
         font-weight: 500;
         letter-spacing: 0.06em;
