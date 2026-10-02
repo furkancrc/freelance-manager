@@ -23,6 +23,6 @@ ob_start(); ?>
 </form>
 <?php
 $content = ob_get_clean();
-$title = "Connexion";
+$title = "Connexion - Freelance-Manager";
 require __DIR__ . "/../layouts/auth.php";
 

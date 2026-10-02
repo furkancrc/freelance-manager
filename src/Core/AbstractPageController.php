@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/** Base des contrôleurs qui affichent des pages HTML. */
 abstract class AbstractPageController
 {
     protected const PER_PAGE = 10;
 
-    /** Paramètre GET en texte, null s'il est absent ou vide. */
     protected function query(string $key): ?string
     {
         $value = $_GET[$key] ?? null;

@@ -11,7 +11,6 @@ use App\Models\Favorite;
 use App\Models\Freelance;
 use App\Models\Manager;
 
-/** Espace personnel : candidatures, favoris et profil. */
 final class AccountPageController extends AbstractPageController
 {
     private const APPLICATION_STATUSES = ["pending", "accepted", "rejected"];
@@ -23,7 +22,6 @@ final class AccountPageController extends AbstractPageController
         private Manager $managers,
     ) {}
 
-    /** GET /candidatures — SF14 */
     public function applications(): void
     {
         Security::requireRole(["freelance"]);
@@ -43,7 +41,6 @@ final class AccountPageController extends AbstractPageController
         require __DIR__ . "/../Views/account/applications.php";
     }
 
-    /** GET /favoris — SF18 */
     public function favorites(): void
     {
         Security::requireRole(["freelance"]);
@@ -54,7 +51,6 @@ final class AccountPageController extends AbstractPageController
         require __DIR__ . "/../Views/account/favorites.php";
     }
 
-    /** GET /profil — le freelance ou le manager modifie son propre profil. */
     public function profile(): void
     {
         Security::requireRole(["freelance", "manager"]);

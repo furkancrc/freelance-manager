@@ -7,13 +7,9 @@ ob_start(); ?>
         <h2>1. Éditeurs du site</h2>
         <p>
             Le présent site, développé dans le cadre d'un projet d'études, est édité par :<br>
-            <strong>Pierre Houllière</strong>,
-            <strong>Furkan Ciraci</strong> et
-            <strong>Yanis Yachir</strong><br>
+            Pierre, Furkan et Yanis<br>
             Étudiants en cycle ingénieur<br>
-            Campus CESI Rouen<br>
-            80 Avenue du Maryse Bastié, 76800 Saint-Étienne-du-Rouvray<br>
-            Email : contact@entreprise.test (adresse fictive)
+            Campus CESI Rouen
         </p>
     </section>
 
@@ -46,3 +42,4 @@ $content = ob_get_clean();
 $title = "Mentions légales — Freelance Manager";
 $description = "Mentions légales de Freelance Manager, projet d'études CESI.";
 require __DIR__ . "/../layouts/main.php";
+

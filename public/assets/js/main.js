@@ -1,19 +1,3 @@
-// Interactions JavaScript des pages.
-//
-// Les pages sont rendues en PHP. Le JavaScript ne fait que :
-// - envoyer les formulaires [data-api] à l'API JSON (avec le jeton CSRF) ;
-// - gérer les boutons d'action [data-api] (supprimer, favoris…) ;
-// - relancer les filtres de recherche quand une liste déroulante change ;
-// - afficher le message de confirmation après une redirection.
-//
-// Attributs utilisés sur un formulaire ou un bouton :
-//   data-api="/api/missions"   URL appelée
-//   data-method="POST"         méthode HTTP (POST par défaut)
-//   data-confirm="…"           demande une confirmation avant l'envoi
-//   data-redirect="/missions"  page suivante ({id} = id renvoyé par l'API) ;
-//                              sans cet attribut, la page est rechargée
-//   data-flash="…"             message affiché sur la page suivante
-
 const csrfToken =
     document.querySelector('meta[name="csrf-token"]')?.content ?? "";
 
@@ -44,7 +28,6 @@ async function callApi(method, url, body) {
     return { ok: response.ok, status: response.status, data };
 }
 
-// Lit un formulaire en objet ; les champs vides deviennent null.
 function readForm(form) {
     const data = {};
 
@@ -56,7 +39,6 @@ function readForm(form) {
     return data;
 }
 
-// Affiche les erreurs de l'API sous les champs concernés.
 function showErrors(form, res) {
     form.querySelectorAll(".field-error").forEach((node) => node.remove());
     form.querySelectorAll(".has-error").forEach((node) =>
@@ -87,14 +69,11 @@ function showErrors(form, res) {
     form.querySelector(".has-error")?.focus();
 }
 
-// Action réussie : on garde le message puis on change de page.
 function done(element, data) {
     if (element.dataset.flash) {
         try {
             sessionStorage.setItem("flash", element.dataset.flash);
-        } catch {
-            // Stockage indisponible (navigation privée) : pas de message.
-        }
+        } catch {}
     }
 
     if (element.dataset.redirect) {
@@ -159,7 +138,6 @@ document.querySelectorAll("button[data-api]").forEach((button) => {
     });
 });
 
-// Filtres : une liste déroulante ou une case relance la recherche.
 document.querySelectorAll("form.filters").forEach((form) => {
     form.addEventListener("change", (event) => {
         if (event.target.matches("select, [type=checkbox]")) {
@@ -168,7 +146,6 @@ document.querySelectorAll("form.filters").forEach((form) => {
     });
 });
 
-// Message de confirmation laissé par la page précédente.
 try {
     const message = sessionStorage.getItem("flash");
     const box = document.getElementById("flash");
@@ -181,6 +158,4 @@ try {
         flash.textContent = message;
         box.append(flash);
     }
-} catch {
-    // Stockage indisponible : rien à afficher.
-}
+} catch {}

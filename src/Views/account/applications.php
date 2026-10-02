@@ -4,7 +4,8 @@ use App\Core\View;
 /** @var array $applications */
 /** @var string|null $status */
 /** @var string[] $statuses */
-ob_start(); ?>
+ob_start();
+?>
 <div class="page-head">
     <div>
         <h1>Mes candidatures</h1>
@@ -39,14 +40,24 @@ ob_start(); ?>
             <?php foreach ($applications as $application): ?>
                 <tr>
                     <td>
-                        <a href="/missions/<?= (int) $application["mission_id"] ?>">
+                        <a href="/missions/<?= (int) $application[
+                            "mission_id"
+                        ] ?>">
                             <?= View::e($application["mission_title"]) ?>
                         </a>
                     </td>
-                    <td data-label="Lieu"><?= View::e($application["mission_location"] ?? "—") ?></td>
-                    <td data-label="TJM proposé" class="num"><?= View::money($application["proposed_rate"]) ?></td>
-                    <td data-label="Statut"><?= View::tag($application["status"]) ?></td>
-                    <td data-label="Envoyée le" class="num"><?= View::date($application["created_at"]) ?></td>
+                    <td data-label="Lieu"><?= View::e(
+                        $application["mission_location"] ?? "—",
+                    ) ?></td>
+                    <td data-label="TJM proposé" class="num"><?= View::money(
+                        $application["proposed_rate"],
+                    ) ?></td>
+                    <td data-label="Statut"><?= View::tag(
+                        $application["status"],
+                    ) ?></td>
+                    <td data-label="Envoyée le" class="num"><?= View::date(
+                        $application["created_at"],
+                    ) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -54,5 +65,6 @@ ob_start(); ?>
 <?php endif; ?>
 <?php
 $content = ob_get_clean();
-$title = "Mes candidatures — Freelance Manager";
+$title = "Mes candidatures - Freelance-Manager";
 require __DIR__ . "/../layouts/main.php";
+

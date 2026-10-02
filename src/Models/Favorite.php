@@ -12,11 +12,6 @@ final class Favorite
 {
     public function __construct(private PDO $pdo) {}
 
-    /**
-     * SF16 : ajoute une mission aux favoris du freelance connecté.
-     *
-     * @throws DomainException 404 mission/profil introuvable, 409 déjà en favori
-     */
     public function add(int $freelanceUserId, int $missionId): void
     {
         $freelanceId = $this->freelanceIdForUser($freelanceUserId);
@@ -45,11 +40,6 @@ final class Favorite
         }
     }
 
-    /**
-     * SF17 : retire une mission des favoris du freelance connecté.
-     *
-     * @throws DomainException 404 si la mission n'était pas en favori
-     */
     public function remove(int $freelanceUserId, int $missionId): void
     {
         $freelanceId = $this->freelanceIdForUser($freelanceUserId);
@@ -63,13 +53,14 @@ final class Favorite
         ]);
 
         if ($stmt->rowCount() === 0) {
-            throw new DomainException("Cette mission n'est pas en favori.", 404);
+            throw new DomainException(
+                "Cette mission n'est pas en favori.",
+                404,
+            );
         }
     }
 
     /**
-     * SF18 : missions favorites du freelance connecté, les plus récemment ajoutées d'abord.
-     *
      * @return array<int, array<string, mixed>>
      */
     public function listForFreelanceUser(int $freelanceUserId): array

@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /login
-Allow: /mentions-legales
-Disallow: /
-
-Sitemap: http://localhost:8080/sitemap.xml

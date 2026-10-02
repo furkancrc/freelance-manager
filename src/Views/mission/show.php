@@ -8,7 +8,8 @@ use App\Core\View;
 /** @var bool $isFavorite */
 /** @var array|null $myApplication */
 $id = (int) $mission["id"];
-ob_start(); ?>
+ob_start();
+?>
 <p class="back"><a href="/missions">← Missions</a></p>
 
 <article>
@@ -23,8 +24,12 @@ ob_start(); ?>
                 <button class="button secondary" type="button"
                         data-api="/api/missions/<?= $id ?>/favorites"
                         data-method="<?= $isFavorite ? "DELETE" : "POST" ?>"
-                        data-flash="<?= $isFavorite ? "Retirée des favoris." : "Ajoutée aux favoris." ?>">
-                    <?= $isFavorite ? "★ Retirer des favoris" : "☆ Ajouter aux favoris" ?>
+                        data-flash="<?= $isFavorite
+                            ? "Retirée des favoris."
+                            : "Ajoutée aux favoris." ?>">
+                    <?= $isFavorite
+                        ? "★ Retirer des favoris"
+                        : "☆ Ajouter aux favoris" ?>
                 </button>
             <?php endif; ?>
 
@@ -46,13 +51,27 @@ ob_start(); ?>
     <div class="split">
         <aside>
             <dl class="meta">
-                <div><dt>Statut</dt><dd><?= View::tag($mission["status"]) ?></dd></div>
-                <div><dt>Lieu</dt><dd><?= View::e($mission["location"] ?? "—") ?></dd></div>
-                <div><dt>Budget</dt><dd class="num"><?= View::money($mission["budget"]) ?></dd></div>
-                <div><dt>TJM</dt><dd class="num"><?= View::money($mission["daily_rate"]) ?></dd></div>
-                <div><dt>Début</dt><dd class="num"><?= View::date($mission["start_date"]) ?></dd></div>
-                <div><dt>Fin</dt><dd class="num"><?= View::date($mission["end_date"]) ?></dd></div>
-                <div><dt>Publiée le</dt><dd class="num"><?= View::date($mission["created_at"]) ?></dd></div>
+                <div><dt>Statut</dt><dd><?= View::tag(
+                    $mission["status"],
+                ) ?></dd></div>
+                <div><dt>Lieu</dt><dd><?= View::e(
+                    $mission["location"] ?? "—",
+                ) ?></dd></div>
+                <div><dt>Budget</dt><dd class="num"><?= View::money(
+                    $mission["budget"],
+                ) ?></dd></div>
+                <div><dt>TJM</dt><dd class="num"><?= View::money(
+                    $mission["daily_rate"],
+                ) ?></dd></div>
+                <div><dt>Début</dt><dd class="num"><?= View::date(
+                    $mission["start_date"],
+                ) ?></dd></div>
+                <div><dt>Fin</dt><dd class="num"><?= View::date(
+                    $mission["end_date"],
+                ) ?></dd></div>
+                <div><dt>Publiée le</dt><dd class="num"><?= View::date(
+                    $mission["created_at"],
+                ) ?></dd></div>
             </dl>
         </aside>
 
@@ -65,7 +84,9 @@ ob_start(); ?>
 
                     <?php if ($myApplication !== null): ?>
                         <p class="note">
-                            Vous avez postulé le <?= View::date($myApplication["created_at"]) ?>
+                            Vous avez postulé le <?= View::date(
+                                $myApplication["created_at"],
+                            ) ?>
                             — <?= View::tag($myApplication["status"]) ?>
                         </p>
                     <?php elseif ($mission["status"] === "open"): ?>
@@ -81,7 +102,9 @@ ob_start(); ?>
                             <label class="field">
                                 <span>TJM proposé (€)</span>
                                 <input name="proposed_rate" type="number" min="0" step="1"
-                                       value="<?= View::e($mission["daily_rate"]) ?>">
+                                       value="<?= View::e(
+                                           $mission["daily_rate"],
+                                       ) ?>">
                             </label>
                             <p class="form-error"></p>
                             <div class="form-actions">
@@ -96,7 +119,9 @@ ob_start(); ?>
 
             <?php if ($canEdit): ?>
                 <section>
-                    <h2 class="section-title">Candidatures reçues (<?= count($applications) ?>)</h2>
+                    <h2 class="section-title">Candidatures reçues (<?= count(
+                        $applications,
+                    ) ?>)</h2>
 
                     <?php if ($applications === []): ?>
                         <p class="empty">Aucune candidature pour le moment.</p>
@@ -112,18 +137,39 @@ ob_start(); ?>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($applications as $application): ?>
+                                <?php foreach (
+                                    $applications
+                                    as $application
+                                ): ?>
                                     <tr>
                                         <td>
-                                            <a href="/freelances/<?= (int) $application["freelance_id"] ?>">
-                                                <?= View::e($application["first_name"] . " " . $application["last_name"]) ?>
+                                            <a href="/freelances/<?= (int) $application[
+                                                "freelance_id"
+                                            ] ?>">
+                                                <?= View::e(
+                                                    $application["first_name"] .
+                                                        " " .
+                                                        $application[
+                                                            "last_name"
+                                                        ],
+                                                ) ?>
                                             </a>
-                                            <br><span class="muted"><?= View::e($application["email"]) ?></span>
+                                            <br><span class="muted"><?= View::e(
+                                                $application["email"],
+                                            ) ?></span>
                                         </td>
-                                        <td data-label="Message" class="cell-text"><?= View::e($application["message"] ?? "—") ?></td>
-                                        <td data-label="TJM proposé" class="num"><?= View::money($application["proposed_rate"]) ?></td>
-                                        <td data-label="Statut"><?= View::tag($application["status"]) ?></td>
-                                        <td data-label="Reçue le" class="num"><?= View::date($application["created_at"]) ?></td>
+                                        <td data-label="Message" class="cell-text"><?= View::e(
+                                            $application["message"] ?? "—",
+                                        ) ?></td>
+                                        <td data-label="TJM proposé" class="num"><?= View::money(
+                                            $application["proposed_rate"],
+                                        ) ?></td>
+                                        <td data-label="Statut"><?= View::tag(
+                                            $application["status"],
+                                        ) ?></td>
+                                        <td data-label="Reçue le" class="num"><?= View::date(
+                                            $application["created_at"],
+                                        ) ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -136,6 +182,6 @@ ob_start(); ?>
 </article>
 <?php
 $content = ob_get_clean();
-$title = $mission["title"] . " — Freelance Manager";
-$description = "Mission freelance : " . $mission["title"];
+$title = $mission["title"] . " - Freelance-Manager";
 require __DIR__ . "/../layouts/main.php";
+

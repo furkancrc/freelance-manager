@@ -64,10 +64,6 @@ final class Security
         }
     }
 
-    /**
-     * Les requêtes qui modifient des données (POST, PUT, DELETE) doivent aussi
-     * envoyer le jeton CSRF dans l'en-tête X-CSRF-Token.
-     */
     public static function requireJsonAuth(): array
     {
         $user = self::currentUser();

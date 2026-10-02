@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/** Petites fonctions d'affichage utilisées dans les vues. */
 final class View
 {
     private const LABELS = [
@@ -19,7 +18,6 @@ final class View
         "busy" => "Occupé",
     ];
 
-    /** Échappe une valeur pour l'afficher dans le HTML (protection XSS). */
     public static function e(mixed $value): string
     {
         return htmlspecialchars((string) ($value ?? ""));
@@ -74,7 +72,6 @@ final class View
         return $html;
     }
 
-    /** URL de la page $page en conservant les filtres de recherche. */
     public static function pageUrl(int $page): string
     {
         $params = array_filter($_GET, "is_string");

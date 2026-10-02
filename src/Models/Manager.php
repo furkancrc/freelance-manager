@@ -22,7 +22,6 @@ final class Manager
         return $stmt->fetchAll();
     }
 
-    /** Crée le compte utilisateur et le profil manager, renvoie le user_id. */
     public function create(array $data): int
     {
         $this->pdo->beginTransaction();

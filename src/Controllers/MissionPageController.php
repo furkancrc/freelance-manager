@@ -20,7 +20,6 @@ final class MissionPageController extends AbstractPageController
         private Favorite $favorites,
     ) {}
 
-    /** GET /missions — SF7 recherche, SF11 statistiques, SF19 pagination. */
     public function index(): void
     {
         Security::requireAuth();
@@ -50,7 +49,6 @@ final class MissionPageController extends AbstractPageController
         require __DIR__ . "/../Views/mission/index.php";
     }
 
-    /** GET /missions/{id} */
     public function show(int $id): void
     {
         Security::requireAuth();
@@ -66,7 +64,6 @@ final class MissionPageController extends AbstractPageController
             ($user["role"] === "manager" &&
                 $this->missions->isOwnedBy($id, (int) $user["id"]));
 
-        // SF15 : le propriétaire et l'admin voient les candidatures reçues.
         $applications = $canEdit
             ? $this->candidatures->listForMission($id)
             : [];
@@ -93,7 +90,6 @@ final class MissionPageController extends AbstractPageController
         require __DIR__ . "/../Views/mission/show.php";
     }
 
-    /** GET /missions/nouvelle — SF8 */
     public function create(): void
     {
         Security::requireRole(["manager"]);
@@ -104,7 +100,6 @@ final class MissionPageController extends AbstractPageController
         require __DIR__ . "/../Views/mission/form.php";
     }
 
-    /** GET /missions/{id}/modifier — SF9 */
     public function edit(int $id): void
     {
         Security::requireRole(["admin", "manager"]);

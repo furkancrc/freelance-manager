@@ -140,7 +140,6 @@ final class MissionController extends AbstractApiController
             $errors["location"] = "La localisation est requise.";
         }
 
-        // Les champs fournis suivent aussi les règles de modification.
         return $errors + $this->validateUpdate($data, []);
     }
 

@@ -8,13 +8,16 @@ use App\Core\View;
 /** @var array $closedMissions */
 $id = (int) $freelance["id"];
 $fullName = $freelance["first_name"] . " " . $freelance["last_name"];
-ob_start(); ?>
+ob_start();
+?>
 <p class="back"><a href="/freelances">← Freelances</a></p>
 
 <article>
     <div class="page-head">
         <div>
-            <p class="eyebrow"><?= View::e($freelance["title"] ?? "Freelance") ?></p>
+            <p class="eyebrow"><?= View::e(
+                $freelance["title"] ?? "Freelance",
+            ) ?></p>
             <h1><?= View::e($fullName) ?></h1>
         </div>
 
@@ -37,23 +40,39 @@ ob_start(); ?>
     <div class="split">
         <aside>
             <dl class="meta">
-                <div><dt>Disponibilité</dt><dd><?= View::tag($freelance["availability"]) ?></dd></div>
-                <div><dt>Email</dt><dd><a href="mailto:<?= View::e($freelance["email"]) ?>"><?= View::e($freelance["email"]) ?></a></dd></div>
-                <div><dt>Lieu</dt><dd><?= View::e($freelance["location"] ?? "—") ?></dd></div>
-                <div><dt>TJM</dt><dd class="num"><?= View::money($freelance["daily_rate"]) ?></dd></div>
+                <div><dt>Disponibilité</dt><dd><?= View::tag(
+                    $freelance["availability"],
+                ) ?></dd></div>
+                <div><dt>Email</dt><dd><a href="mailto:<?= View::e(
+                    $freelance["email"],
+                ) ?>"><?= View::e($freelance["email"]) ?></a></dd></div>
+                <div><dt>Lieu</dt><dd><?= View::e(
+                    $freelance["location"] ?? "—",
+                ) ?></dd></div>
+                <div><dt>TJM</dt><dd class="num"><?= View::money(
+                    $freelance["daily_rate"],
+                ) ?></dd></div>
                 <div>
                     <dt>Note moyenne</dt>
-                    <dd class="num"><?= $average === null ? "—" : number_format($average, 1, ",", "") . " / 5" ?></dd>
+                    <dd class="num"><?= $average === null
+                        ? "—"
+                        : number_format($average, 1, ",", "") . " / 5" ?></dd>
                 </div>
-                <div><dt>Inscrit le</dt><dd class="num"><?= View::date($freelance["created_at"]) ?></dd></div>
+                <div><dt>Inscrit le</dt><dd class="num"><?= View::date(
+                    $freelance["created_at"],
+                ) ?></dd></div>
             </dl>
         </aside>
 
         <div>
-            <p class="description"><?= View::e($freelance["bio"] ?? "Pas de présentation.") ?></p>
+            <p class="description"><?= View::e(
+                $freelance["bio"] ?? "Pas de présentation.",
+            ) ?></p>
 
             <section>
-                <h2 class="section-title">Évaluations (<?= count($reviews) ?>)</h2>
+                <h2 class="section-title">Évaluations (<?= count(
+                    $reviews,
+                ) ?>)</h2>
 
                 <?php if ($reviews === []): ?>
                     <p class="empty">Aucune évaluation pour le moment.</p>
@@ -62,8 +81,16 @@ ob_start(); ?>
                         <?php foreach ($reviews as $review): ?>
                             <li>
                                 <p class="review-head">
-                                    <span class="rating" aria-label="<?= (int) $review["rating"] ?> sur 5">
-                                        <?= str_repeat("■", (int) $review["rating"]) ?><span><?= str_repeat("■", 5 - (int) $review["rating"]) ?></span>
+                                    <span class="rating" aria-label="<?= (int) $review[
+                                        "rating"
+                                    ] ?> sur 5">
+                                        <?= str_repeat(
+                                            "■",
+                                            (int) $review["rating"],
+                                        ) ?><span><?= str_repeat(
+    "■",
+    5 - (int) $review["rating"],
+) ?></span>
                                     </span>
                                     <?= View::e($review["mission_title"]) ?>
                                 </p>
@@ -71,7 +98,11 @@ ob_start(); ?>
                                     <p><?= View::e($review["comment"]) ?></p>
                                 <?php endif; ?>
                                 <p class="muted">
-                                    <?= View::e($review["manager_first_name"] . " " . $review["manager_last_name"]) ?>
+                                    <?= View::e(
+                                        $review["manager_first_name"] .
+                                            " " .
+                                            $review["manager_last_name"],
+                                    ) ?>
                                     · <?= View::date($review["created_at"]) ?>
                                 </p>
                             </li>
@@ -95,15 +126,26 @@ ob_start(); ?>
                                 <label class="field">
                                     <span>Mission</span>
                                     <select name="mission_id">
-                                        <?php foreach ($closedMissions as $mission): ?>
-                                            <option value="<?= (int) $mission["id"] ?>"><?= View::e($mission["title"]) ?></option>
+                                        <?php foreach (
+                                            $closedMissions
+                                            as $mission
+                                        ): ?>
+                                            <option value="<?= (int) $mission[
+                                                "id"
+                                            ] ?>"><?= View::e(
+    $mission["title"],
+) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </label>
                                 <label class="field">
                                     <span>Note</span>
                                     <select name="rating">
-                                        <?php for ($rating = 5; $rating >= 1; $rating--): ?>
+                                        <?php for (
+                                            $rating = 5;
+                                            $rating >= 1;
+                                            $rating--
+                                        ): ?>
                                             <option value="<?= $rating ?>"><?= $rating ?> / 5</option>
                                         <?php endfor; ?>
                                     </select>
@@ -126,5 +168,6 @@ ob_start(); ?>
 </article>
 <?php
 $content = ob_get_clean();
-$title = $fullName . " — Freelance Manager";
+$title = $fullName . " - Freelance-Manager";
 require __DIR__ . "/../layouts/main.php";
+

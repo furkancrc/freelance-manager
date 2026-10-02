@@ -12,8 +12,6 @@ final class Mission
     public function __construct(private PDO $pdo) {}
 
     /**
-     * SF7 + SF19 : $limit = 0 renvoie tous les résultats.
-     *
      * @return array<int, array<string, mixed>>
      */
     public function search(
@@ -24,7 +22,9 @@ final class Mission
         [$where, $params] = $this->filters($filters);
 
         $sql =
-            "SELECT * FROM missions WHERE 1=1" . $where . " ORDER BY created_at DESC";
+            "SELECT * FROM missions WHERE 1=1" .
+            $where .
+            " ORDER BY created_at DESC";
 
         if ($limit > 0) {
             $sql .= " LIMIT " . $limit . " OFFSET " . $offset;

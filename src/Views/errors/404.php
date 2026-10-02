@@ -8,7 +8,7 @@
 </head>
 <body class="auth-page">
     <main class="auth-box">
-        <p class="brand">Freelance<span>/</span>Manager</p>
+        <p class="brand">Freelance<span>-</span>Manager</p>
         <h1>404 — Page introuvable</h1>
         <p><a href="/">Retour à l'accueil</a></p>
     </main>

@@ -4,7 +4,6 @@
 $user = \App\Core\Security::currentUser();
 $currentPath = (string) parse_url($_SERVER["REQUEST_URI"] ?? "/", PHP_URL_PATH);
 
-// Liens de navigation selon le rôle.
 $links = [];
 if ($user !== null) {
     $links["/missions"] = "Missions";
@@ -45,7 +44,7 @@ if ($user !== null) {
 <body>
     <header class="topbar">
         <div class="wrap topbar-inner">
-            <a class="brand" href="/">Freelance<span>/</span>Manager</a>
+            <a class="brand" href="/">Freelance<span>-</span>Manager</a>
 
             <?php if ($user !== null): ?>
                 <div class="session">
@@ -66,11 +65,11 @@ if ($user !== null) {
                 <nav class="nav" aria-label="Navigation principale">
                     <?php foreach ($links as $href => $label): ?>
                         <a href="<?= $href ?>"<?= str_starts_with(
-                            $currentPath,
-                            $href,
-                        )
-                            ? ' aria-current="page"'
-                            : "" ?>><?= $label ?></a>
+    $currentPath,
+    $href,
+)
+    ? ' aria-current="page"'
+    : "" ?>><?= $label ?></a>
                     <?php endforeach; ?>
                 </nav>
             <?php endif; ?>
@@ -84,7 +83,6 @@ if ($user !== null) {
 
     <footer class="footer">
         <div class="wrap footer-inner">
-            <span>Freelance Manager — projet CESI</span>
             <a href="/mentions-legales">Mentions légales</a>
         </div>
     </footer>

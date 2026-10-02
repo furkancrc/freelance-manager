@@ -20,7 +20,8 @@ if ($isProfile) {
     $redirect = "/freelances/{id}";
     $flash = "Freelance créé.";
 }
-ob_start(); ?>
+ob_start();
+?>
 <?php if (!$isProfile): ?>
     <p class="back"><a href="<?= $back ?>">← Retour</a></p>
 <?php endif; ?>
@@ -35,7 +36,9 @@ ob_start(); ?>
 </div>
 
 <form class="form" novalidate
-      data-api="<?= $isEdit ? "/api/freelances/" . (int) $freelance["id"] : "/api/freelances" ?>"
+      data-api="<?= $isEdit
+          ? "/api/freelances/" . (int) $freelance["id"]
+          : "/api/freelances" ?>"
       data-method="<?= $isEdit ? "PUT" : "POST" ?>"
       data-redirect="<?= $redirect ?>"
       data-flash="<?= $flash ?>">
@@ -54,16 +57,22 @@ ob_start(); ?>
     <div class="field-row">
         <label class="field">
             <span>Prénom</span>
-            <input name="first_name" value="<?= View::e($freelance["first_name"] ?? "") ?>">
+            <input name="first_name" value="<?= View::e(
+                $freelance["first_name"] ?? "",
+            ) ?>">
         </label>
         <label class="field">
             <span>Nom</span>
-            <input name="last_name" value="<?= View::e($freelance["last_name"] ?? "") ?>">
+            <input name="last_name" value="<?= View::e(
+                $freelance["last_name"] ?? "",
+            ) ?>">
         </label>
     </div>
     <label class="field">
         <span>Titre</span>
-        <input name="title" value="<?= View::e($freelance["title"] ?? "") ?>" placeholder="Ex. Développeuse PHP">
+        <input name="title" value="<?= View::e(
+            $freelance["title"] ?? "",
+        ) ?>" placeholder="Ex. Développeuse PHP">
     </label>
     <label class="field">
         <span>Présentation</span>
@@ -72,20 +81,29 @@ ob_start(); ?>
     <div class="field-row">
         <label class="field">
             <span>TJM (€)</span>
-            <input name="daily_rate" type="number" min="0" step="1" value="<?= View::e($freelance["daily_rate"] ?? "") ?>">
+            <input name="daily_rate" type="number" min="0" step="1" value="<?= View::e(
+                $freelance["daily_rate"] ?? "",
+            ) ?>">
         </label>
         <label class="field">
             <span>Disponibilité</span>
-            <select name="availability"><?= View::options($availabilities, $freelance["availability"]) ?></select>
+            <select name="availability"><?= View::options(
+                $availabilities,
+                $freelance["availability"],
+            ) ?></select>
         </label>
     </div>
     <label class="field">
         <span>Lieu</span>
-        <input name="location" value="<?= View::e($freelance["location"] ?? "") ?>">
+        <input name="location" value="<?= View::e(
+            $freelance["location"] ?? "",
+        ) ?>">
     </label>
     <p class="form-error"></p>
     <div class="form-actions">
-        <button class="button" type="submit"><?= $isEdit ? "Enregistrer" : "Créer le freelance" ?></button>
+        <button class="button" type="submit"><?= $isEdit
+            ? "Enregistrer"
+            : "Créer le freelance" ?></button>
         <?php if (!$isProfile): ?>
             <a class="button secondary" href="<?= $back ?>">Annuler</a>
         <?php endif; ?>
@@ -93,5 +111,6 @@ ob_start(); ?>
 </form>
 <?php
 $content = ob_get_clean();
-$title = $heading . " — Freelance Manager";
+$title = $heading . " - Freelance-Manager";
 require __DIR__ . "/../layouts/main.php";
+

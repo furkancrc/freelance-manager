@@ -30,10 +30,6 @@ Security::startSession();
 $router = new Router();
 $pdo = Database::getConnection();
 
-// ---------------------------------------------------------------------------
-// Pages HTML
-// ---------------------------------------------------------------------------
-
 $router->get("/", function (): void {
     Security::requireAuth();
     header("Location: /missions");
@@ -79,9 +75,7 @@ $router->get("/missions/{id}", function (string $id) use ($pdo): void {
     )->show((int) $id);
 });
 
-$router->get("/missions/{id}/modifier", function (string $id) use (
-    $pdo,
-): void {
+$router->get("/missions/{id}/modifier", function (string $id) use ($pdo): void {
     new MissionPageController(
         new Mission($pdo),
         new Candidature($pdo),
@@ -131,9 +125,7 @@ $router->get("/managers/nouveau", function () use ($pdo): void {
     new ManagerPageController(new Manager($pdo))->create();
 });
 
-$router->get("/managers/{id}/modifier", function (string $id) use (
-    $pdo,
-): void {
+$router->get("/managers/{id}/modifier", function (string $id) use ($pdo): void {
     new ManagerPageController(new Manager($pdo))->edit((int) $id);
 });
 
@@ -164,10 +156,6 @@ $router->get("/profil", function () use ($pdo): void {
     )->profile();
 });
 
-// ---------------------------------------------------------------------------
-// API JSON (appelée par le JavaScript des pages)
-// ---------------------------------------------------------------------------
-
 $router->get("/api/freelances", function () use ($pdo): void {
     new FreelanceController(new Freelance($pdo), new Review($pdo))->index();
 });
@@ -188,9 +176,7 @@ $router->put("/api/freelances/{id}", function (string $id) use ($pdo): void {
     );
 });
 
-$router->delete("/api/freelances/{id}", function (string $id) use (
-    $pdo,
-): void {
+$router->delete("/api/freelances/{id}", function (string $id) use ($pdo): void {
     new FreelanceController(new Freelance($pdo), new Review($pdo))->destroy(
         (int) $id,
     );

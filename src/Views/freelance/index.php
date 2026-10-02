@@ -5,7 +5,8 @@ use App\Core\View;
 /** @var array $freelances */
 /** @var array $filters */
 /** @var string[] $availabilities */
-ob_start(); ?>
+ob_start();
+?>
 <div class="page-head">
     <div>
         <h1>Freelances</h1>
@@ -25,9 +26,13 @@ ob_start(); ?>
     </select>
     <input name="location" value="<?= View::e($filters["location"]) ?>"
            placeholder="Lieu" aria-label="Lieu">
-    <input name="min_rate" type="number" min="0" value="<?= View::e($filters["min_rate"]) ?>"
+    <input name="min_rate" type="number" min="0" value="<?= View::e(
+        $filters["min_rate"],
+    ) ?>"
            placeholder="TJM min" aria-label="TJM minimum">
-    <input name="max_rate" type="number" min="0" value="<?= View::e($filters["max_rate"]) ?>"
+    <input name="max_rate" type="number" min="0" value="<?= View::e(
+        $filters["max_rate"],
+    ) ?>"
            placeholder="TJM max" aria-label="TJM maximum">
     <button class="button secondary" type="submit">Filtrer</button>
 </form>
@@ -50,13 +55,25 @@ ob_start(); ?>
                 <tr>
                     <td>
                         <a href="/freelances/<?= (int) $freelance["id"] ?>">
-                            <?= View::e($freelance["first_name"] . " " . $freelance["last_name"]) ?>
+                            <?= View::e(
+                                $freelance["first_name"] .
+                                    " " .
+                                    $freelance["last_name"],
+                            ) ?>
                         </a>
                     </td>
-                    <td data-label="Titre"><?= View::e($freelance["title"] ?? "—") ?></td>
-                    <td data-label="Lieu"><?= View::e($freelance["location"] ?? "—") ?></td>
-                    <td data-label="TJM" class="num"><?= View::money($freelance["daily_rate"]) ?></td>
-                    <td data-label="Disponibilité"><?= View::tag($freelance["availability"]) ?></td>
+                    <td data-label="Titre"><?= View::e(
+                        $freelance["title"] ?? "—",
+                    ) ?></td>
+                    <td data-label="Lieu"><?= View::e(
+                        $freelance["location"] ?? "—",
+                    ) ?></td>
+                    <td data-label="TJM" class="num"><?= View::money(
+                        $freelance["daily_rate"],
+                    ) ?></td>
+                    <td data-label="Disponibilité"><?= View::tag(
+                        $freelance["availability"],
+                    ) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -66,6 +83,6 @@ ob_start(); ?>
 <?php require __DIR__ . "/../partials/pagination.php"; ?>
 <?php
 $content = ob_get_clean();
-$title = "Freelances — Freelance Manager";
-$description = "Rechercher un freelance par nom, disponibilité, lieu ou TJM.";
+$title = "Freelances - Freelance Manager";
 require __DIR__ . "/../layouts/main.php";
+

@@ -12,7 +12,6 @@ final class Freelance
 {
     public function __construct(private PDO $pdo) {}
 
-    /** SF2 + SF19 : $limit = 0 renvoie tous les résultats. */
     public function search(
         array $filters,
         int $limit = 0,

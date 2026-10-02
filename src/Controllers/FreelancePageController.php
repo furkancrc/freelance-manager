@@ -20,7 +20,6 @@ final class FreelancePageController extends AbstractPageController
         private Mission $missions,
     ) {}
 
-    /** GET /freelances — SF2 recherche, SF19 pagination. */
     public function index(): void
     {
         Security::requireRole(["admin", "manager"]);
@@ -47,7 +46,6 @@ final class FreelancePageController extends AbstractPageController
         require __DIR__ . "/../Views/freelance/index.php";
     }
 
-    /** GET /freelances/{id} — fiche, évaluations et formulaire SF6. */
     public function show(int $id): void
     {
         Security::requireRole(["admin", "manager"]);
@@ -64,7 +62,6 @@ final class FreelancePageController extends AbstractPageController
                 ? null
                 : array_sum(array_column($reviews, "rating")) / count($reviews);
 
-        // Un manager évalue sur une de ses missions terminées.
         $closedMissions =
             $user["role"] === "manager"
                 ? $this->missions->search([
@@ -76,7 +73,6 @@ final class FreelancePageController extends AbstractPageController
         require __DIR__ . "/../Views/freelance/show.php";
     }
 
-    /** GET /freelances/nouveau — SF3 */
     public function create(): void
     {
         Security::requireRole(["admin"]);
@@ -88,7 +84,6 @@ final class FreelancePageController extends AbstractPageController
         require __DIR__ . "/../Views/freelance/form.php";
     }
 
-    /** GET /freelances/{id}/modifier — SF4 */
     public function edit(int $id): void
     {
         Security::requireRole(["admin"]);

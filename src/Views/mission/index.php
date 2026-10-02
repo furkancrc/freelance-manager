@@ -8,7 +8,8 @@ use App\Core\View;
 /** @var string[] $statuses */
 $isManager = $user["role"] === "manager";
 $onlyMine = $filters["manager_user_id"] !== null;
-ob_start(); ?>
+ob_start();
+?>
 <div class="page-head">
     <div>
         <h1>Missions</h1>
@@ -33,7 +34,9 @@ ob_start(); ?>
            placeholder="Lieu" aria-label="Lieu">
     <?php if ($isManager): ?>
         <label class="check">
-            <input type="checkbox" name="mine" value="1" <?= $onlyMine ? "checked" : "" ?>>
+            <input type="checkbox" name="mine" value="1" <?= $onlyMine
+                ? "checked"
+                : "" ?>>
             Mes missions
         </label>
     <?php endif; ?>
@@ -57,14 +60,26 @@ ob_start(); ?>
         <tbody>
             <?php foreach ($missions as $mission): ?>
                 <tr>
-                    <td><a href="/missions/<?= (int) $mission["id"] ?>"><?= View::e($mission["title"]) ?></a></td>
-                    <td data-label="Lieu"><?= View::e($mission["location"] ?? "—") ?></td>
-                    <td data-label="TJM" class="num"><?= View::money($mission["daily_rate"]) ?></td>
-                    <td data-label="Budget" class="num"><?= View::money($mission["budget"]) ?></td>
+                    <td><a href="/missions/<?= (int) $mission[
+                        "id"
+                    ] ?>"><?= View::e($mission["title"]) ?></a></td>
+                    <td data-label="Lieu"><?= View::e(
+                        $mission["location"] ?? "—",
+                    ) ?></td>
+                    <td data-label="TJM" class="num"><?= View::money(
+                        $mission["daily_rate"],
+                    ) ?></td>
+                    <td data-label="Budget" class="num"><?= View::money(
+                        $mission["budget"],
+                    ) ?></td>
                     <td data-label="Période" class="nowrap">
-                        <?= View::date($mission["start_date"]) ?> → <?= View::date($mission["end_date"]) ?>
+                        <?= View::date(
+                            $mission["start_date"],
+                        ) ?> → <?= View::date($mission["end_date"]) ?>
                     </td>
-                    <td data-label="Statut"><?= View::tag($mission["status"]) ?></td>
+                    <td data-label="Statut"><?= View::tag(
+                        $mission["status"],
+                    ) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -74,6 +89,6 @@ ob_start(); ?>
 <?php require __DIR__ . "/../partials/pagination.php"; ?>
 <?php
 $content = ob_get_clean();
-$title = "Missions — Freelance Manager";
-$description = "Rechercher et consulter les missions freelance publiées.";
+$title = "Missions - Freelance-Manager";
 require __DIR__ . "/../layouts/main.php";
+

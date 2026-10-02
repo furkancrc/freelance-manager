@@ -9,7 +9,7 @@
 </head>
 <body class="auth-page">
     <main class="auth-box">
-        <p class="brand">Freelance<span>/</span>Manager</p>
+        <p class="brand">Freelance<span>-</span>Manager</p>
         <h1>403 — Accès refusé</h1>
         <p>Votre rôle ne permet pas d'accéder à cette page.</p>
         <p><a href="/">Retour à l'accueil</a></p>

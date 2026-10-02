@@ -14,7 +14,7 @@
 </head>
 <body class="auth-page">
     <main class="auth-box">
-        <p class="brand">Freelance<span>/</span>Manager</p>
+        <p class="brand">Freelance<span>-</span>Manager</p>
         <?= $content ?>
     </main>
 </body>

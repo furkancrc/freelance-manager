@@ -18,7 +18,8 @@ if ($isProfile) {
     $redirect = "/managers";
     $flash = "Manager créé.";
 }
-ob_start(); ?>
+ob_start();
+?>
 <?php if (!$isProfile): ?>
     <p class="back"><a href="/managers">← Managers</a></p>
 <?php endif; ?>
@@ -33,7 +34,9 @@ ob_start(); ?>
 </div>
 
 <form class="form" novalidate
-      data-api="<?= $isEdit ? "/api/managers/" . (int) $manager["user_id"] : "/api/managers" ?>"
+      data-api="<?= $isEdit
+          ? "/api/managers/" . (int) $manager["user_id"]
+          : "/api/managers" ?>"
       data-method="<?= $isEdit ? "PUT" : "POST" ?>"
       data-redirect="<?= $redirect ?>"
       data-flash="<?= $flash ?>">
@@ -52,26 +55,36 @@ ob_start(); ?>
     <div class="field-row">
         <label class="field">
             <span>Prénom</span>
-            <input name="first_name" value="<?= View::e($manager["first_name"] ?? "") ?>">
+            <input name="first_name" value="<?= View::e(
+                $manager["first_name"] ?? "",
+            ) ?>">
         </label>
         <label class="field">
             <span>Nom</span>
-            <input name="last_name" value="<?= View::e($manager["last_name"] ?? "") ?>">
+            <input name="last_name" value="<?= View::e(
+                $manager["last_name"] ?? "",
+            ) ?>">
         </label>
     </div>
     <div class="field-row">
         <label class="field">
             <span>Département</span>
-            <input name="department" value="<?= View::e($manager["department"] ?? "") ?>">
+            <input name="department" value="<?= View::e(
+                $manager["department"] ?? "",
+            ) ?>">
         </label>
         <label class="field">
             <span>Téléphone</span>
-            <input name="phone" type="tel" value="<?= View::e($manager["phone"] ?? "") ?>">
+            <input name="phone" type="tel" value="<?= View::e(
+                $manager["phone"] ?? "",
+            ) ?>">
         </label>
     </div>
     <p class="form-error"></p>
     <div class="form-actions">
-        <button class="button" type="submit"><?= $isEdit ? "Enregistrer" : "Créer le manager" ?></button>
+        <button class="button" type="submit"><?= $isEdit
+            ? "Enregistrer"
+            : "Créer le manager" ?></button>
         <?php if (!$isProfile): ?>
             <a class="button secondary" href="/managers">Annuler</a>
         <?php endif; ?>
@@ -79,5 +92,6 @@ ob_start(); ?>
 </form>
 <?php
 $content = ob_get_clean();
-$title = $heading . " — Freelance Manager";
+$title = $heading . " - Freelance Manager";
 require __DIR__ . "/../layouts/main.php";
+

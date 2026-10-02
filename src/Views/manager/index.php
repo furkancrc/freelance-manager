@@ -2,11 +2,14 @@
 use App\Core\View;
 
 /** @var array $managers */
-ob_start(); ?>
+ob_start();
+?>
 <div class="page-head">
     <div>
         <h1>Managers</h1>
-        <p class="muted"><?= count($managers) ?> manager<?= count($managers) > 1 ? "s" : "" ?> · chefs de projet qui publient les missions.</p>
+        <p class="muted"><?= count($managers) ?> manager<?= count($managers) > 1
+     ? "s"
+     : "" ?> · chefs de projet qui publient les missions.</p>
     </div>
     <a class="button" href="/managers/nouveau">Nouveau manager</a>
 </div>
@@ -29,17 +32,33 @@ ob_start(); ?>
             <?php foreach ($managers as $manager): ?>
                 <tr>
                     <td>
-                        <a href="/managers/<?= (int) $manager["user_id"] ?>/modifier">
-                            <?= View::e($manager["first_name"] . " " . $manager["last_name"]) ?>
+                        <a href="/managers/<?= (int) $manager[
+                            "user_id"
+                        ] ?>/modifier">
+                            <?= View::e(
+                                $manager["first_name"] .
+                                    " " .
+                                    $manager["last_name"],
+                            ) ?>
                         </a>
                     </td>
-                    <td data-label="Email"><?= View::e($manager["email"]) ?></td>
-                    <td data-label="Département"><?= View::e($manager["department"] ?? "—") ?></td>
-                    <td data-label="Téléphone" class="nowrap"><?= View::e($manager["phone"] ?? "—") ?></td>
+                    <td data-label="Email"><?= View::e(
+                        $manager["email"],
+                    ) ?></td>
+                    <td data-label="Département"><?= View::e(
+                        $manager["department"] ?? "—",
+                    ) ?></td>
+                    <td data-label="Téléphone" class="nowrap"><?= View::e(
+                        $manager["phone"] ?? "—",
+                    ) ?></td>
                     <td class="row-actions">
-                        <a class="button secondary small" href="/managers/<?= (int) $manager["user_id"] ?>/modifier">Modifier</a>
+                        <a class="button secondary small" href="/managers/<?= (int) $manager[
+                            "user_id"
+                        ] ?>/modifier">Modifier</a>
                         <button class="button danger small" type="button"
-                                data-api="/api/managers/<?= (int) $manager["user_id"] ?>"
+                                data-api="/api/managers/<?= (int) $manager[
+                                    "user_id"
+                                ] ?>"
                                 data-method="DELETE"
                                 data-confirm="Supprimer ce manager et son compte ?"
                                 data-flash="Manager supprimé.">
@@ -53,5 +72,6 @@ ob_start(); ?>
 <?php endif; ?>
 <?php
 $content = ob_get_clean();
-$title = "Managers — Freelance Manager";
+$title = "Managers - Freelance-Manager";
 require __DIR__ . "/../layouts/main.php";
+
