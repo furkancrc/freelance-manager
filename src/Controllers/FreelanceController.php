@@ -114,6 +114,10 @@ final class FreelanceController extends AbstractApiController
             $this->jsonError("mission_id et rating sont requis.", 422);
         }
 
+        if (isset($data["comment"]) && !is_string($data["comment"])) {
+            $this->jsonError(["comment" => "Doit être un texte."], 422);
+        }
+
         try {
             $reviewId = $this->reviews->create(
                 (int) $user["id"],
@@ -155,6 +159,9 @@ final class FreelanceController extends AbstractApiController
         ) {
             $errors["availability"] = 'Doit être "available" ou "busy".';
         }
+        if (isset($data["daily_rate"]) && !is_numeric($data["daily_rate"])) {
+            $errors["daily_rate"] = "Doit être numérique.";
+        }
 
         return $errors;
     }
@@ -163,7 +170,16 @@ final class FreelanceController extends AbstractApiController
     {
         $errors = [];
         if (
-            isset($data["availability"]) &&
+            array_key_exists("first_name", $data) &&
+            empty($data["first_name"])
+        ) {
+            $errors["first_name"] = "Le prénom ne peut pas être vide.";
+        }
+        if (array_key_exists("last_name", $data) && empty($data["last_name"])) {
+            $errors["last_name"] = "Le nom ne peut pas être vide.";
+        }
+        if (
+            array_key_exists("availability", $data) &&
             !in_array($data["availability"], ["available", "busy"], true)
         ) {
             $errors["availability"] = 'Doit être "available" ou "busy".';

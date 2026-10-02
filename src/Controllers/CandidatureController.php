@@ -27,6 +27,10 @@ final class CandidatureController extends AbstractApiController
             $this->jsonError(["proposed_rate" => "Doit être numérique."], 422);
         }
 
+        if (isset($data["message"]) && !is_string($data["message"])) {
+            $this->jsonError(["message" => "Doit être un texte."], 422);
+        }
+
         try {
             $id = $this->candidatures->apply(
                 (int) $user["id"],
