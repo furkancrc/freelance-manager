@@ -5,6 +5,7 @@ declare(strict_types=1);
 require __DIR__ . "/../vendor/autoload.php";
 
 use App\Controllers\AuthController;
+use App\Controllers\CandidatureController;
 use App\Controllers\FreelanceController;
 use App\Core\Router;
 use App\Core\Security;
@@ -53,6 +54,18 @@ $router->delete("/freelances/{id}", function (string $id): void {
 
 $router->post("/freelances/{id}/reviews", function (string $id): void {
     new FreelanceController()->addReview((int) $id);
+});
+
+$router->post("/missions/{id}/applications", function (string $id): void {
+    new CandidatureController()->store((int) $id);
+});
+
+$router->get("/applications/me", function (): void {
+    new CandidatureController()->mine();
+});
+
+$router->get("/missions/{id}/applications", function (string $id): void {
+    new CandidatureController()->forMission((int) $id);
 });
 
 $router->dispatch($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
