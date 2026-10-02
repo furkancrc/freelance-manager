@@ -1,7 +1,11 @@
 <?php
 <<<<<<< HEAD
+<<<<<<< HEAD
 /** @var array{id:int,email:string,role:string} $user */
 <<<<<<< HEAD
+=======
+/** @var array{id:int,email:string,role:string} $user */
+>>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
 ob_start();
 ?>
 <h1>Bienvenue, <?= htmlspecialchars($user['email']) ?></h1>
@@ -10,6 +14,7 @@ ob_start();
 $content = ob_get_clean();
 $title = 'Accueil';
 require __DIR__ . '/../layouts/main.php';
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> f762781 (feat: cleanup candidature & legals)
@@ -56,3 +61,5 @@ $title = "Mentions Légales";
 require __DIR__ . "/../layouts/main.php";
 
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+>>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))

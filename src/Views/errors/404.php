@@ -6,10 +6,14 @@
 </head>
 <body>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <h1>404 — Page introuvable</h1>
 =======
     <h1>404 - Page introuvable</h1>
 >>>>>>> dccf881 (feat: clean auth and seed)
+=======
+    <h1>404 — Page introuvable</h1>
+>>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
     <p><a href="/">Retour à l'accueil</a></p>
 </body>
 </html>
