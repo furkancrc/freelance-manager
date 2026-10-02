@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . "/../vendor/autoload.php";
 
 use App\Controllers\AuthController;
 use App\Controllers\FreelanceController;
@@ -13,46 +13,46 @@ Security::startSession();
 
 $router = new Router();
 
-$router->get('/', function (): void {
+$router->get("/", function (): void {
     Security::requireAuth();
     $user = Security::currentUser();
-    require __DIR__ . '/../src/Views/home/index.php';
+    require __DIR__ . "/../src/Views/home/index.php";
 });
 
-$router->get('/login', function (): void {
-    (new AuthController())->showLogin();
+$router->get("/login", function (): void {
+    new AuthController()->showLogin();
 });
 
-$router->post('/login', function (): void {
-    (new AuthController())->login();
+$router->post("/login", function (): void {
+    new AuthController()->login();
 });
 
-$router->post('/logout', function (): void {
-    (new AuthController())->logout();
+$router->post("/logout", function (): void {
+    new AuthController()->logout();
 });
 
-$router->get('/freelances', function (): void {
-    (new FreelanceController())->index();
+$router->get("/freelances", function (): void {
+    new FreelanceController()->index();
 });
 
-$router->post('/freelances', function (): void {
-    (new FreelanceController())->store();
+$router->post("/freelances", function (): void {
+    new FreelanceController()->store();
 });
 
-$router->get('/freelances/{id}', function (string $id): void {
-    (new FreelanceController())->show((int) $id);
+$router->get("/freelances/{id}", function (string $id): void {
+    new FreelanceController()->show((int) $id);
 });
 
-$router->put('/freelances/{id}', function (string $id): void {
-    (new FreelanceController())->update((int) $id);
+$router->put("/freelances/{id}", function (string $id): void {
+    new FreelanceController()->update((int) $id);
 });
 
-$router->delete('/freelances/{id}', function (string $id): void {
-    (new FreelanceController())->destroy((int) $id);
+$router->delete("/freelances/{id}", function (string $id): void {
+    new FreelanceController()->destroy((int) $id);
 });
 
-$router->post('/freelances/{id}/reviews', function (string $id): void {
-    (new FreelanceController())->addReview((int) $id);
+$router->post("/freelances/{id}/reviews", function (string $id): void {
+    new FreelanceController()->addReview((int) $id);
 });
 
-$router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+$router->dispatch($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);

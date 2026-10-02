@@ -1,9 +1,7 @@
 RewriteEngine On
 
-# Sert directement les fichiers/dossiers existants (assets, etc.)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Tout le reste passe par le front controller
 RewriteRule ^ index.php [L]

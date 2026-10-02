@@ -14,14 +14,14 @@ final class AuthController
 
     public function __construct()
     {
-        $this->users = new User(Database::connection());
+        $this->users = new User(Database::getConnection());
     }
 
     public function showLogin(): void
     {
         if (Security::isLoggedIn()) {
-            header('Location: /');
-            exit;
+            header("Location: /");
+            exit();
         }
 
         $this->renderLogin();
@@ -29,43 +29,46 @@ final class AuthController
 
     public function login(): void
     {
-        if (!Security::verifyCsrf($_POST['csrf_token'] ?? null)) {
+        if (!Security::verifyCsrf($_POST["csrf_token"] ?? null)) {
             http_response_code(400);
-            $this->renderLogin('Requête invalide, merci de réessayer.');
+            $this->renderLogin("Requête invalide, merci de réessayer.");
 
             return;
         }
 
-        $email = trim((string) ($_POST['email'] ?? ''));
-        $password = (string) ($_POST['password'] ?? '');
+        $email = trim((string) ($_POST["email"] ?? ""));
+        $password = (string) ($_POST["password"] ?? "");
 
-        $user = $email === '' ? null : $this->users->findByEmail($email);
+        $user = $email === "" ? null : $this->users->findByEmail($email);
 
-        if ($user === null || !password_verify($password, $user['password_hash'])) {
-            $this->renderLogin('Email ou mot de passe incorrect.');
+        if (
+            $user === null ||
+            !password_verify($password, $user["password_hash"])
+        ) {
+            $this->renderLogin("Email ou mot de passe incorrect.");
 
             return;
         }
 
-        if ((int) $user['is_active'] === 0) {
-            $this->renderLogin('Ce compte est désactivé.');
+        if ((int) $user["is_active"] === 0) {
+            $this->renderLogin("Ce compte est désactivé.");
 
             return;
         }
 
         Security::login($user);
-        header('Location: /');
+        header("Location: /");
     }
 
     public function logout(): void
     {
         Security::logout();
-        header('Location: /login');
+        header("Location: /login");
     }
 
     private function renderLogin(?string $error = null): void
     {
         $csrfToken = Security::csrfToken();
-        require __DIR__ . '/../Views/auth/login.php';
+        require __DIR__ . "/../Views/auth/login.php";
     }
 }

@@ -18,7 +18,7 @@ final class FreelanceController
 
     public function __construct()
     {
-        $pdo = Database::connection();
+        $pdo = Database::getConnection();
         $this->freelances = new Freelance($pdo);
         $this->reviews = new Review($pdo);
     }
