@@ -240,6 +240,16 @@ $router->post("/api/missions/{id}/applications", function (string $id) use (
     new CandidatureController(new Candidature($pdo))->store((int) $id);
 });
 
+$router->put("/api/applications/{id}", function (string $id) use ($pdo): void {
+    new CandidatureController(new Candidature($pdo))->updateStatus((int) $id);
+});
+
+$router->delete("/api/applications/{id}", function (string $id) use (
+    $pdo,
+): void {
+    new CandidatureController(new Candidature($pdo))->destroy((int) $id);
+});
+
 $router->get("/api/applications/me", function () use ($pdo): void {
     new CandidatureController(new Candidature($pdo))->mine();
 });

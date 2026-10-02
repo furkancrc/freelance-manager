@@ -13,6 +13,8 @@ ob_start();
     </div>
 </div>
 
+<p class="form-error" id="action-error"></p>
+
 <form class="filters filters-narrow" method="get" action="/candidatures">
     <select name="status" aria-label="Statut">
         <option value="">Tous les statuts</option>
@@ -34,6 +36,7 @@ ob_start();
                 <th class="num">TJM proposé</th>
                 <th>Statut</th>
                 <th class="num">Envoyée le</th>
+                <th><span class="visually-hidden">Actions</span></th>
             </tr>
         </thead>
         <tbody>
@@ -58,6 +61,19 @@ ob_start();
                     <td data-label="Envoyée le" class="num"><?= View::date(
                         $application["created_at"],
                     ) ?></td>
+                    <td class="row-actions">
+                        <?php if ($application["status"] === "pending"): ?>
+                            <button class="button danger small" type="button"
+                                    data-api="/api/applications/<?= (int) $application[
+                                        "id"
+                                    ] ?>"
+                                    data-method="DELETE"
+                                    data-confirm="Annuler cette candidature ?"
+                                    data-flash="Candidature annulée.">
+                                Annuler
+                            </button>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

@@ -119,6 +119,7 @@ document.querySelectorAll("button[data-api]").forEach((button) => {
         const res = await callApi(
             button.dataset.method ?? "POST",
             button.dataset.api,
+            button.dataset.body ? JSON.parse(button.dataset.body) : undefined,
         );
 
         if (res.ok) {

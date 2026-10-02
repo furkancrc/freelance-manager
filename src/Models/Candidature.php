@@ -112,6 +112,39 @@ final class Candidature
         return $stmt->fetchAll();
     }
 
+    public function find(int $id): ?array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT a.*, f.user_id AS freelance_user_id, m.manager_id, mg.user_id AS manager_user_id
+             FROM applications a
+             JOIN freelances f ON f.id = a.freelance_id
+             JOIN missions m ON m.id = a.mission_id
+             JOIN managers mg ON mg.id = m.manager_id
+             WHERE a.id = :id',
+        );
+        $stmt->execute(["id" => $id]);
+        $application = $stmt->fetch();
+
+        return $application === false ? null : $application;
+    }
+
+    public function updateStatus(int $id, string $status): bool
+    {
+        $stmt = $this->pdo->prepare(
+            "UPDATE applications SET status = :status WHERE id = :id",
+        );
+
+        return $stmt->execute(["status" => $status, "id" => $id]);
+    }
+
+    public function delete(int $id): bool
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM applications WHERE id = :id");
+        $stmt->execute(["id" => $id]);
+
+        return $stmt->rowCount() > 0;
+    }
+
     public function missionExists(
         int $missionId,
         ?int $managerUserId = null,

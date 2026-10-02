@@ -46,6 +46,64 @@ final class CandidatureController extends AbstractApiController
         }
     }
 
+    /** Le manager de la mission (ou l'admin) accepte ou refuse une candidature. */
+    public function updateStatus(int $id): void
+    {
+        $user = Security::requireJsonRole(["admin", "manager"]);
+        $application = $this->candidatures->find($id);
+
+        if ($application === null) {
+            $this->jsonError("Candidature introuvable.", 404);
+        }
+
+        if (
+            $user["role"] === "manager" &&
+            (int) $application["manager_user_id"] !== (int) $user["id"]
+        ) {
+            $this->jsonError(
+                "Vous ne pouvez gérer que les candidatures de vos missions.",
+                403,
+            );
+        }
+
+        $data = $this->readJsonBody();
+        $status = $data["status"] ?? null;
+
+        if (!in_array($status, ["accepted", "rejected"], true)) {
+            $this->jsonError(
+                ["status" => "Doit valoir accepted ou rejected."],
+                422,
+            );
+        }
+
+        $this->candidatures->updateStatus($id, $status);
+        $this->json($this->candidatures->find($id));
+    }
+
+    /** Le freelance annule sa candidature tant qu'elle est en attente. */
+    public function destroy(int $id): void
+    {
+        $user = Security::requireJsonRole(["freelance"]);
+        $application = $this->candidatures->find($id);
+
+        if (
+            $application === null ||
+            (int) $application["freelance_user_id"] !== (int) $user["id"]
+        ) {
+            $this->jsonError("Candidature introuvable.", 404);
+        }
+
+        if ($application["status"] !== "pending") {
+            $this->jsonError(
+                "Seule une candidature en attente peut être annulée.",
+                422,
+            );
+        }
+
+        $this->candidatures->delete($id);
+        http_response_code(204);
+    }
+
     public function mine(): void
     {
         $user = Security::requireJsonRole(["freelance"]);

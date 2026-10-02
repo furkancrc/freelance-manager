@@ -89,6 +89,17 @@ ob_start();
                             ) ?>
                             — <?= View::tag($myApplication["status"]) ?>
                         </p>
+                        <?php if ($myApplication["status"] === "pending"): ?>
+                            <button class="button danger small" type="button"
+                                    data-api="/api/applications/<?= (int) $myApplication[
+                                        "id"
+                                    ] ?>"
+                                    data-method="DELETE"
+                                    data-confirm="Annuler votre candidature ?"
+                                    data-flash="Candidature annulée.">
+                                Annuler ma candidature
+                            </button>
+                        <?php endif; ?>
                     <?php elseif ($mission["status"] === "open"): ?>
                         <form class="form" novalidate
                               data-api="/api/missions/<?= $id ?>/applications"
@@ -134,6 +145,7 @@ ob_start();
                                     <th class="num">TJM proposé</th>
                                     <th>Statut</th>
                                     <th class="num">Reçue le</th>
+                                    <th><span class="visually-hidden">Actions</span></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -170,6 +182,31 @@ ob_start();
                                         <td data-label="Reçue le" class="num"><?= View::date(
                                             $application["created_at"],
                                         ) ?></td>
+                                        <td class="row-actions">
+                                            <?php if ($application["status"] !== "accepted"): ?>
+                                                <button class="button small" type="button"
+                                                        data-api="/api/applications/<?= (int) $application[
+                                                            "id"
+                                                        ] ?>"
+                                                        data-method="PUT"
+                                                        data-body='{"status":"accepted"}'
+                                                        data-flash="Candidature acceptée.">
+                                                    Accepter
+                                                </button>
+                                            <?php endif; ?>
+                                            <?php if ($application["status"] !== "rejected"): ?>
+                                                <button class="button danger small" type="button"
+                                                        data-api="/api/applications/<?= (int) $application[
+                                                            "id"
+                                                        ] ?>"
+                                                        data-method="PUT"
+                                                        data-body='{"status":"rejected"}'
+                                                        data-confirm="Refuser cette candidature ?"
+                                                        data-flash="Candidature refusée.">
+                                                    Refuser
+                                                </button>
+                                            <?php endif; ?>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
