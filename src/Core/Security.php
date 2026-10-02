@@ -63,6 +63,41 @@ final class Security
         }
     }
 
+    /** Variante JSON de requireAuth : renvoie 401 au lieu de rediriger. */
+    public static function requireJsonAuth(): array
+    {
+        $user = self::currentUser();
+        if ($user === null) {
+            self::jsonError(401, "Authentification requise.");
+        }
+
+        return $user;
+    }
+
+    /**
+     * Variante JSON de requireRole : renvoie 401/403 au lieu de rediriger.
+     *
+     * @param string[] $roles
+     */
+    public static function requireJsonRole(array $roles): array
+    {
+        $user = self::requireJsonAuth();
+
+        if (!in_array($user["role"], $roles, true)) {
+            self::jsonError(403, "Rôle insuffisant.");
+        }
+
+        return $user;
+    }
+
+    private static function jsonError(int $status, string $message): never
+    {
+        http_response_code($status);
+        header("Content-Type: application/json");
+        echo json_encode(["error" => $message]);
+        exit();
+    }
+
     public static function csrfToken(): string
     {
         if (empty($_SESSION["csrf_token"])) {
