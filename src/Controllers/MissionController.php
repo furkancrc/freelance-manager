@@ -1,118 +1,109 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
+use App\Core\AbstractApiController;
+use App\Core\Security;
 use App\Models\Mission;
+use DomainException;
 
-final class MissionController {
+final class MissionController extends AbstractApiController
+{
+    public function __construct(private Mission $missions) {}
 
-    private $db;
-
-    public function __construct($dbConnection)
+    public function index(): void
     {
-        $this->db = $dbConnection;
+        $this->json($this->missions->all());
     }
 
-    
-    // SF7 : Afficher la liste de toutes les missions
-    public function index()
+    public function show(int $id): void
     {
-        $missionModel = new Mission($this->db);
-        $missions = $missionModel->getAllMissions();
+        $mission = $this->missions->find($id);
+        if ($mission === null) {
+            $this->jsonError("Mission introuvable.", 404);
+        }
 
-        echo "<h2>Liste des missions</h2>";
-        echo "<pre>";
-        print_r($missions);
-        echo "</pre>";
-        // Plus tard : require __DIR__ . '/../Views/missions/index.php';
+        $this->json($mission);
     }
 
-     // SF7 : Afficher une mission spécifique par son ID
-    public function show(int $id)
+    public function store(): void
     {
-        $missionModel = new Mission($this->db);
-        $mission = $missionModel->getMission($id);
+        $user = Security::requireJsonRole(["admin", "manager"]);
+        $data = $this->readJsonBody();
 
-        if ($mission) {
-            echo "<h2>Détails de la mission : " . htmlspecialchars($mission['title']) . "</h2>";
-            echo "<pre>";
-            print_r($mission);
-            echo "</pre>";
-        } else {
-            echo "Mission introuvable.";
+        $errors = $this->validate($data);
+        if ($errors !== []) {
+            $this->jsonError($errors, 422);
+        }
+
+        try {
+            $id = $this->missions->create((int) $user["id"], $data);
+            $this->json($this->missions->find($id), 201);
+        } catch (DomainException $e) {
+            $this->jsonError($e->getMessage(), 422);
         }
     }
 
-    // SF8 : Créer une mission
-    public function store()
+    public function update(int $id): void
     {
-        $missionModel = new Mission($this->db);
-        
-        // Exemple d'insertion (à adapter plus tard avec les données d'un formulaire $_POST)
-        $success = $missionModel->createMission(
-            1, // manager_id
-            'Refonte API v2', 
-            'Migration complète vers une architecture moderne', 
-            12000.00, 
-            450.00, 
-            '2026-11-01', 
-            '2026-12-31', 
-            'Télétravail', 
-            'open'
-        );
+        Security::requireJsonRole(["admin", "manager"]);
 
-        if ($success) {
-            echo "✅ Mission créée avec succès !";
-        } else {
-            echo "❌ Erreur lors de la création de la mission.";
+        $mission = $this->missions->find($id);
+        if ($mission === null) {
+            $this->jsonError("Mission introuvable.", 404);
         }
+
+        $data = $this->readJsonBody();
+        $success = $this->missions->update($id, $data);
+
+        if (!$success) {
+            $this->jsonError("Aucune modification effectuée.", 422);
+        }
+
+        $this->json($this->missions->find($id));
     }
 
-    // SF9 : Modifier une mission
-    public function update(int $id)
+    public function destroy(int $id): void
     {
-        $missionModel = new Mission($this->db);
-        
-        $success = $missionModel->updateMission(
-            $id,
-            'Refonte API v2 (Mise à jour)', 
-            'Description actualisée', 
-            13000.00, 
-            500.00, 
-            '2026-11-01', 
-            '2027-01-15', 
-            'Paris', 
-            'in_progress'
-        );
+        Security::requireJsonRole(["admin", "manager"]);
 
-        if ($success) {
-            echo "✅ Mission mise à jour avec succès !";
-        } else {
-            echo "❌ Erreur lors de la mise à jour.";
+        if ($this->missions->find($id) === null) {
+            $this->jsonError("Mission introuvable.", 404);
         }
+
+        $this->missions->delete($id);
+        http_response_code(204);
     }
 
-    // SF10 : Supprimer une mission
-    public function destroy(int $id)
+    public function stats(): void
     {
-        $missionModel = new Mission($this->db);
-        $success = $missionModel->deleteMission($id);
-
-        if ($success) {
-            echo "✅ Mission supprimée avec succès !";
-        } else {
-            echo "❌ Erreur lors de la suppression.";
-        }
+        $this->json($this->missions->statistics());
     }
 
-    // SF11 : Statistiques des missions
-    public function stats()
+    private function validate(array $data): array
     {
-        $missionModel = new Mission($this->db);
-        $stats = $missionModel->getStatistics();
+        $errors = [];
+        if (empty($data["title"])) {
+            $errors["title"] = "Le titre est requis.";
+        }
+        if (empty($data["budget"]) || !is_numeric($data["budget"])) {
+            $errors["budget"] = "Le budget doit être numérique.";
+        }
+        if (empty($data["daily_rate"]) || !is_numeric($data["daily_rate"])) {
+            $errors["daily_rate"] = "Le taux journalier doit être numérique.";
+        }
+        if (empty($data["start_date"])) {
+            $errors["start_date"] = "La date de début est requise.";
+        }
+        if (empty($data["end_date"])) {
+            $errors["end_date"] = "La date de fin est requise.";
+        }
+        if (empty($data["location"])) {
+            $errors["location"] = "La localisation est requise.";
+        }
 
-        echo "<h2>Statistiques des missions</h2>";
-        echo "Nombre total de missions : " . $stats['total_missions'] . "<br>";
-        echo "Budget moyen : " . number_format((float)$stats['avg_budget'], 2) . " €";
+        return $errors;
     }
 }

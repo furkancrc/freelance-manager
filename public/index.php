@@ -15,13 +15,13 @@ use App\Core\Security;
 use App\Models\Candidature;
 use App\Models\Freelance;
 use App\Models\Manager;
+use App\Models\Mission;
 use App\Models\Review;
 use App\Models\User;
 
 Security::startSession();
 
 $router = new Router();
-
 $pdo = Database::getConnection();
 
 $router->get("/", function (): void {
@@ -88,46 +88,28 @@ $router->delete("/managers/{id}", function (string $id) use ($pdo): void {
     new ManagerController(new Manager($pdo))->destroy((int) $id);
 });
 
-// SF7 : Liste des missions
-$router->get("/missions", function (): void {
-    $dbConnection = Database::getConnection();
-    (new MissionController($dbConnection))->index();
+$router->get("/missions", function () use ($pdo): void {
+    new MissionController(new Mission($pdo))->index();
 });
 
-// SF8 : Création d'une mission
-$router->post("/missions", function (): void {
-    $dbConnection = Database::getConnection();
-    (new MissionController($dbConnection))->store();
+$router->post("/missions", function () use ($pdo): void {
+    new MissionController(new Mission($pdo))->store();
 });
 
-// SF7 : Afficher une mission spécifique
-$router->get("/missions/{id}", function (string $id): void {
-    $dbConnection = Database::getConnection();
-    (new MissionController($dbConnection))->show((int) $id);
+$router->get("/missions/stats", function () use ($pdo): void {
+    new MissionController(new Mission($pdo))->stats();
 });
 
-// SF9 : Mettre à jour une mission
-$router->put("/missions/{id}", function (string $id): void {
-    $dbConnection = Database::getConnection();
-    (new MissionController($dbConnection))->update((int) $id);
+$router->get("/missions/{id}", function (string $id) use ($pdo): void {
+    new MissionController(new Mission($pdo))->show((int) $id);
 });
 
-// SF10 : Supprimer une mission
-$router->delete("/missions/{id}", function (string $id): void {
-    $dbConnection = Database::getConnection();
-    (new MissionController($dbConnection))->destroy((int) $id);
+$router->put("/missions/{id}", function (string $id) use ($pdo): void {
+    new MissionController(new Mission($pdo))->update((int) $id);
 });
 
-// SF11 : Statistiques
-$router->get("/missions/stats", function (): void {
-    $dbConnection = Database::getConnection();
-    (new MissionController($dbConnection))->stats();
-});
-
-// Route de test rapide pour les missions
-$router->get("/test-mission", function (): void {
-    $dbConnection = Database::getConnection();
-    (new MissionController($dbConnection))->testCrud();
+$router->delete("/missions/{id}", function (string $id) use ($pdo): void {
+    new MissionController(new Mission($pdo))->destroy((int) $id);
 });
 
 $router->post("/missions/{id}/applications", function (string $id) use (

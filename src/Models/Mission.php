@@ -1,90 +1,101 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-final class Mission {
+use PDO;
 
-    private $db;
+class Mission
+{
+    public function __construct(private PDO $pdo) {}
 
-    public function __construct($dbConnection)
+    /** @return array<int, array<string, mixed>> */
+    public function all(): array
     {
-        $this->db = $dbConnection;
+        $stmt = $this->pdo->query(
+            "SELECT * FROM missions ORDER BY created_at DESC",
+        );
+        return $stmt->fetchAll();
     }
 
-    // SF7 : Rechercher / Récupérer toutes les missions ou une mission par ID
-    public function getAllMissions()
+    public function find(int $id): ?array
     {
-        $sql = "SELECT * FROM missions ORDER BY created_at DESC";
-        $stmt = $this->db->query($sql);
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $stmt = $this->pdo->prepare("SELECT * FROM missions WHERE id = :id");
+        $stmt->execute(["id" => $id]);
+        $mission = $stmt->fetch();
+
+        return $mission === false ? null : $mission;
     }
 
-    public function getMission($id)
+    public function create(int $managerId, array $data): int
     {
-        $sql = "SELECT * FROM missions WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([':id' => $id]);
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
-    }
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO missions (manager_id, title, description, budget, daily_rate, start_date, end_date, location, status, created_at)
+             VALUES (:manager_id, :title, :description, :budget, :daily_rate, :start_date, :end_date, :location, :status, NOW())',
+        );
 
-    // SF8 : Créer une mission
-    public function createMission($managerId, $title, $description, $budget, $dailyRate, $startDate, $endDate, $location, $status)
-    {
-        $sql = "INSERT INTO missions (manager_id, title, description, budget, daily_rate, start_date, end_date, location, status, created_at) 
-                VALUES (:manager_id, :title, :description, :budget, :daily_rate, :start_date, :end_date, :location, :status, NOW())";
-
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
-            ':manager_id'  => $managerId,
-            ':title'       => $title,
-            ':description' => $description,
-            ':budget'      => $budget,
-            ':daily_rate'  => $dailyRate,
-            ':start_date'  => $startDate,
-            ':end_date'    => $endDate,
-            ':location'    => $location,
-            ':status'      => $status
+        $stmt->execute([
+            "manager_id" => $managerId,
+            "title" => $data["title"],
+            "description" => $data["description"] ?? null,
+            "budget" => $data["budget"],
+            "daily_rate" => $data["daily_rate"],
+            "start_date" => $data["start_date"],
+            "end_date" => $data["end_date"],
+            "location" => $data["location"],
+            "status" => $data["status"] ?? "open",
         ]);
+
+        return (int) $this->pdo->lastInsertId();
     }
 
-    // SF9 : Modifier une mission
-    public function updateMission($id, $title, $description, $budget, $dailyRate, $startDate, $endDate, $location, $status)
+    public function update(int $id, array $data): bool
     {
-        $sql = "UPDATE missions 
-                SET title = :title, description = :description, budget = :budget, 
-                    daily_rate = :daily_rate, start_date = :start_date, end_date = :end_date, 
-                    location = :location, status = :status 
-                WHERE id = :id";
+        $allowed = [
+            "title",
+            "description",
+            "budget",
+            "daily_rate",
+            "start_date",
+            "end_date",
+            "location",
+            "status",
+        ];
+        $set = [];
+        $params = ["id" => $id];
 
-        $stmt = $this->db->prepare($sql);
+        foreach ($allowed as $field) {
+            if (array_key_exists($field, $data)) {
+                $set[] = "$field = :$field";
+                $params[$field] = $data[$field];
+            }
+        }
 
-        return $stmt->execute([
-            ':id'          => $id,
-            ':title'       => $title,
-            ':description' => $description,
-            ':budget'      => $budget,
-            ':daily_rate'  => $dailyRate,
-            ':start_date'  => $startDate,
-            ':end_date'    => $endDate,
-            ':location'    => $location,
-            ':status'      => $status
-        ]);
+        if ($set === []) {
+            return false;
+        }
+
+        $sql = "UPDATE missions SET " . implode(", ", $set) . " WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->rowCount() > 0;
     }
 
-    // SF10 : Supprimer une mission
-    public function deleteMission($id)
+    public function delete(int $id): bool
     {
-        $sql = "DELETE FROM missions WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([':id' => $id]);
+        $stmt = $this->pdo->prepare("DELETE FROM missions WHERE id = :id");
+        $stmt->execute(["id" => $id]);
+
+        return $stmt->rowCount() > 0;
     }
 
-    // SF11 : Statistiques missions (ex: nombre total et budget moyen)
-    public function getStatistics()
+    public function statistics(): array
     {
-        $sql = "SELECT COUNT(*) as total_missions, AVG(budget) as avg_budget FROM missions";
-        $stmt = $this->db->query($sql);
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        $stmt = $this->pdo->query(
+            "SELECT COUNT(*) as total_missions, AVG(budget) as avg_budget FROM missions",
+        );
+        return $stmt->fetch();
     }
 }
