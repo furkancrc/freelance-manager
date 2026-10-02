@@ -51,6 +51,7 @@ final class Router
     public function delete(string $path, callable $handler): void
     {
         $this->add('DELETE', $path, $handler);
+<<<<<<< HEAD
 =======
         $this->add("POST", $path, $handler);
 >>>>>>> dccf881 (feat: clean auth and seed)
@@ -61,6 +62,10 @@ final class Router
     }
 
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+    }
+
+>>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
     private function add(string $method, string $path, callable $handler): void
     {
         $this->routes[$method][$path] = $handler;

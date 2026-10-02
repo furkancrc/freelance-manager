@@ -26,6 +26,7 @@ use App\Core\Database;
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\AuthController;
+use App\Controllers\FreelanceController;
 use App\Core\Router;
 use App\Core\Security;
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
@@ -57,6 +58,9 @@ $router->post('/logout', function (): void {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
 $router->get('/freelances', function (): void {
     (new FreelanceController())->index();
 });

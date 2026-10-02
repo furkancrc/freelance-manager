@@ -139,6 +139,10 @@ final class Security
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    /** Variante JSON de requireAuth : renvoie 401 au lieu de rediriger. */
+>>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
     public static function requireJsonAuth(): array
     {
         $user = self::currentUser();
@@ -150,6 +154,11 @@ final class Security
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Variante JSON de requireRole : renvoie 401/403 au lieu de rediriger.
+     *
+>>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
      * @param string[] $roles
      */
     public static function requireJsonRole(array $roles): array
@@ -171,8 +180,11 @@ final class Security
         exit;
     }
 
+<<<<<<< HEAD
 =======
 >>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
+=======
+>>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
     /** Génère (ou réutilise) le jeton CSRF de la session courante. */
     public static function csrfToken(): string
     {
