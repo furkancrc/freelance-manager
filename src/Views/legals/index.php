@@ -1,16 +1,15 @@
-<?php
-ob_start(); ?>
-
 <main class="container">
     <h1>Mentions Légales</h1>
 
     <section>
-        <h2>1. Éditeurs du site</h2>
+        <h2>1. Éditeur du site</h2>
         <p>
             Le présent site, développé dans le cadre d'un projet d'études, est édité par :<br>
-                Pierre, Furkan et Yanis<br>
-            Étudiants en cycle ingénieur<br>
-            Campus CESI Rouen
+            <strong>Pierre Houllière</strong><br>
+            Étudiant en cycle ingénieur<br>
+            Campus CESI Rouen<br>
+            80 Avenue du Maryse Bastié, 76800 Saint-Étienne-du-Rouvray<br>
+            Email : contact@entreprise.test (adresse fictive)
         </p>
     </section>
 
@@ -26,18 +25,15 @@ ob_start(); ?>
         <p>
             L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.
         </p>
+        <p>
+            La reproduction de tout ou partie de ce site sur un support électronique quel qu'il soit est formellement interdite sauf autorisation expresse du directeur de la publication.
+        </p>
     </section>
 
     <section>
         <h2>4. Données personnelles</h2>
         <p>
-            Dans le cadre de la fonctionnalité "Plateforme de gestion des missions freelance en entreprise", ce site simule la collecte de données personnelles. Ces données sont fictives ou générées pour les besoins de l'évaluation et ne font l'objet d'aucun traitement commercial.
+            Dans le cadre de la fonctionnalité "Plateforme de gestion des missions freelance en entreprise", ce site simule la collecte de données personnelles (noms, prénoms, adresses email). Ces données sont fictives ou générées pour les besoins de l'évaluation (seed) et ne font l'objet d'aucun traitement commercial.
         </p>
     </section>
 </main>
-
-<?php
-$content = ob_get_clean();
-$title = "Mentions Légales";
-require __DIR__ . "/../layouts/main.php";
-
