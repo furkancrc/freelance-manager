@@ -51,6 +51,11 @@ final class AuthController
 
     public function logout(): void
     {
+        if (!Security::verifyCsrf($_POST["csrf_token"] ?? null)) {
+            header("Location: /");
+            return;
+        }
+
         Security::logout();
         header("Location: /login");
     }

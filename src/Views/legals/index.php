@@ -1,6 +1,6 @@
 <?php
 ob_start(); ?>
-<div class="container">
+<div class="prose">
     <h1>Mentions Légales</h1>
 
     <section>
@@ -41,5 +41,6 @@ ob_start(); ?>
 </div>
 <?php
 $content = ob_get_clean();
-$title = "Mentions Légales";
+$title = "Mentions légales — Freelance Manager";
+$description = "Mentions légales de Freelance Manager, projet d'études CESI.";
 require __DIR__ . "/../layouts/main.php";

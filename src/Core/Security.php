@@ -59,15 +59,27 @@ final class Security
 
         if (!in_array(self::currentUser()["role"], $roles, true)) {
             http_response_code(403);
-            exit("Accès refusé : rôle insuffisant.");
+            require __DIR__ . "/../Views/errors/403.php";
+            exit();
         }
     }
 
+    /**
+     * Les requêtes qui modifient des données (POST, PUT, DELETE) doivent aussi
+     * envoyer le jeton CSRF dans l'en-tête X-CSRF-Token.
+     */
     public static function requireJsonAuth(): array
     {
         $user = self::currentUser();
         if ($user === null) {
             self::jsonError(401, "Authentification requise.");
+        }
+
+        if (
+            $_SERVER["REQUEST_METHOD"] !== "GET" &&
+            !self::verifyCsrf($_SERVER["HTTP_X_CSRF_TOKEN"] ?? null)
+        ) {
+            self::jsonError(403, "Jeton CSRF invalide, rechargez la page.");
         }
 
         return $user;
