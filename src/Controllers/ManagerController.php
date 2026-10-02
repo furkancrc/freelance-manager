@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Core\AbstractApiController;
 use App\Core\Security;
 use App\Models\Manager;
+use DomainException;
 
 final class ManagerController extends AbstractApiController
 {
@@ -35,7 +36,17 @@ final class ManagerController extends AbstractApiController
             );
         }
 
+        if ($this->managers->findByUserId($userId) === null) {
+            $this->jsonError("Manager introuvable.", 404);
+        }
+
         $data = $this->readJsonBody();
+        $errors = $this->validateUpdate($data);
+
+        if ($errors !== []) {
+            $this->jsonError($errors, 422);
+        }
+
         $success = $this->managers->update($userId, $data);
 
         if (!$success) {
@@ -53,7 +64,28 @@ final class ManagerController extends AbstractApiController
             $this->jsonError("Manager introuvable.", 404);
         }
 
-        $this->managers->delete($userId);
+        try {
+            $this->managers->delete($userId);
+        } catch (DomainException $e) {
+            $this->jsonError($e->getMessage(), $e->getCode() ?: 409);
+        }
+
         http_response_code(204);
+    }
+
+    private function validateUpdate(array $data): array
+    {
+        $errors = [];
+        if (
+            array_key_exists("first_name", $data) &&
+            empty($data["first_name"])
+        ) {
+            $errors["first_name"] = "Le prénom ne peut pas être vide.";
+        }
+        if (array_key_exists("last_name", $data) && empty($data["last_name"])) {
+            $errors["last_name"] = "Le nom ne peut pas être vide.";
+        }
+
+        return $errors;
     }
 }
