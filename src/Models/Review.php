@@ -10,6 +10,7 @@ use PDO;
 final class Review
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     public function __construct(private PDO $pdo) {}
 
     public function create(
@@ -59,44 +60,59 @@ final class Review
     public function __construct(private PDO $pdo)
     {
     }
+=======
+    public function __construct(private PDO $pdo) {}
+>>>>>>> f8e10eb (fix: freelance controller)
 
-    /**
-     * Enregistre l'évaluation d'un freelance par le manager connecté, pour une mission donnée.
-     *
-     * Règles : la mission doit appartenir au manager, être "closed", et le freelance doit avoir
-     * une candidature "accepted" sur cette mission (cf. commentaires de database/schema.sql).
-     *
-     * @throws DomainException si une règle métier n'est pas respectée
-     */
-    public function create(int $managerUserId, int $freelanceId, int $missionId, int $rating, ?string $comment): int
-    {
+    public function create(
+        int $managerUserId,
+        int $freelanceId,
+        int $missionId,
+        int $rating,
+        ?string $comment,
+    ): int {
         if ($rating < 1 || $rating > 5) {
-            throw new DomainException('La note doit être comprise entre 1 et 5.');
+            throw new DomainException(
+                "La note doit être comprise entre 1 et 5.",
+            );
         }
 
-        $managerStmt = $this->pdo->prepare('SELECT id FROM managers WHERE user_id = :user_id');
-        $managerStmt->execute(['user_id' => $managerUserId]);
+        $managerStmt = $this->pdo->prepare(
+            "SELECT id FROM managers WHERE user_id = :user_id",
+        );
+        $managerStmt->execute(["user_id" => $managerUserId]);
         $managerId = $managerStmt->fetchColumn();
 
         if ($managerId === false) {
-            throw new DomainException('Profil manager introuvable.');
+            throw new DomainException("Profil manager introuvable.");
         }
 
-        $missionStmt = $this->pdo->prepare('SELECT manager_id, status FROM missions WHERE id = :id');
-        $missionStmt->execute(['id' => $missionId]);
+        $missionStmt = $this->pdo->prepare(
+            "SELECT manager_id, status FROM missions WHERE id = :id",
+        );
+        $missionStmt->execute(["id" => $missionId]);
         $mission = $missionStmt->fetch();
 
         if ($mission === false) {
-            throw new DomainException('Mission introuvable.');
+            throw new DomainException("Mission introuvable.");
         }
 
-        if ((int) $mission['manager_id'] !== (int) $managerId) {
-            throw new DomainException("Cette mission n'appartient pas à ce manager.");
+        if ((int) $mission["manager_id"] !== (int) $managerId) {
+            throw new DomainException(
+                "Cette mission n'appartient pas à ce manager.",
+            );
         }
 
+<<<<<<< HEAD
         if ($mission['status'] !== 'closed') {
             throw new DomainException('Seules les missions terminées peuvent être évaluées.');
 >>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
+=======
+        if ($mission["status"] !== "closed") {
+            throw new DomainException(
+                "Seules les missions terminées peuvent être évaluées.",
+            );
+>>>>>>> f8e10eb (fix: freelance controller)
         }
 
         $applicationStmt = $this->pdo->prepare(
@@ -104,10 +120,14 @@ final class Review
              WHERE mission_id = :mission_id AND freelance_id = :freelance_id AND status = 'accepted'",
         );
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f8e10eb (fix: freelance controller)
         $applicationStmt->execute([
             "mission_id" => $missionId,
             "freelance_id" => $freelanceId,
         ]);
+<<<<<<< HEAD
 
         if ($applicationStmt->fetchColumn() === false) {
             throw new DomainException(
@@ -119,6 +139,13 @@ final class Review
         if ($applicationStmt->fetchColumn() === false) {
             throw new DomainException("Ce freelance n'a pas de candidature acceptée sur cette mission.");
 >>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
+=======
+
+        if ($applicationStmt->fetchColumn() === false) {
+            throw new DomainException(
+                "Ce freelance n'a pas de candidature acceptée sur cette mission.",
+            );
+>>>>>>> f8e10eb (fix: freelance controller)
         }
 
         $insert = $this->pdo->prepare(
@@ -127,11 +154,15 @@ final class Review
         );
         $insert->execute([
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f8e10eb (fix: freelance controller)
             "freelance_id" => $freelanceId,
             "manager_id" => $managerId,
             "mission_id" => $missionId,
             "rating" => $rating,
             "comment" => $comment,
+<<<<<<< HEAD
 =======
             'freelance_id' => $freelanceId,
             'manager_id' => $managerId,
@@ -139,6 +170,8 @@ final class Review
             'rating' => $rating,
             'comment' => $comment,
 >>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
+=======
+>>>>>>> f8e10eb (fix: freelance controller)
         ]);
 
         return (int) $this->pdo->lastInsertId();

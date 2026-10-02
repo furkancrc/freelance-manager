@@ -168,9 +168,12 @@ final class Security
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     /** Variante JSON de requireAuth : renvoie 401 au lieu de rediriger. */
 >>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
+=======
+>>>>>>> f8e10eb (fix: freelance controller)
     public static function requireJsonAuth(): array
     {
         $user = self::currentUser();
@@ -183,10 +186,13 @@ final class Security
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
      * Variante JSON de requireRole : renvoie 401/403 au lieu de rediriger.
      *
 >>>>>>> 92aaf3a (feat(freelance): add freelance CRUD, search and reviews (F01, #1))
+=======
+>>>>>>> f8e10eb (fix: freelance controller)
      * @param string[] $roles
      */
     public static function requireJsonRole(array $roles): array
