@@ -13,6 +13,7 @@ use App\Core\Router;
 use App\Core\Security;
 use App\Models\Candidature;
 use App\Models\Freelance;
+use App\Models\Manager;
 use App\Models\Review;
 use App\Models\User;
 
@@ -74,10 +75,16 @@ $router->post("/freelances/{id}/reviews", function (string $id) use (
     );
 });
 
-$router->get("/test-manager", function (): void {
-    $dbConnection = Database::getConnection();
-    $controller = new ManagerController($dbConnection);
-    $controller->testCreate();
+$router->get("/managers/{id}", function (string $id) use ($pdo): void {
+    new ManagerController(new Manager($pdo))->show((int) $id);
+});
+
+$router->put("/managers/{id}", function (string $id) use ($pdo): void {
+    new ManagerController(new Manager($pdo))->update((int) $id);
+});
+
+$router->delete("/managers/{id}", function (string $id) use ($pdo): void {
+    new ManagerController(new Manager($pdo))->destroy((int) $id);
 });
 
 $router->post("/missions/{id}/applications", function (string $id) use (

@@ -1,129 +1,59 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
+use App\Core\AbstractApiController;
+use App\Core\Security;
 use App\Models\Manager;
 
-final class ManagerController{
+final class ManagerController extends AbstractApiController
+{
+    public function __construct(private Manager $managers) {}
 
-
-    public function __construct($dbConnection)
+    public function show(int $userId): void
     {
-        $this->db = $dbConnection;
-    }
+        Security::requireJsonRole(["admin", "manager"]);
 
-    public function testCreate()
-    {
-        $managerModel = new Manager($this->db);
-
-        // On utilise un seul ID pour le test (qui doit déjà exister dans la table users !)
-        $testManagers = [
-            [
-                'id' => 5, 
-                'nom' => 'Dupont', 
-                'prenom' => 'Jean', 
-                'dept' => 'IT', 
-                'tel' => '0600000000', 
-                'new_dept' => 'Direction Générale' // La donnée qui servira pour l'Update
-            ]
-        ];
-
-        echo "<h2>Début du test CRUD complet</h2>";
-
-        foreach ($testManagers as $manager) {
-            echo "<h3>--- Test pour l'ID Utilisateur : {$manager['id']} ---</h3>";
-
-            // 1. CREATE (Création)
-            echo "<strong>1. CREATE :</strong> Insertion du manager...<br>";
-            $created = $managerModel->createManager($manager['id'], $manager['nom'], $manager['prenom'], $manager['dept'], $manager['tel']);
-            
-            if ($created) {
-                echo "✅ Succès de l'insertion.<br>";
-            } else {
-                echo "❌ Échec de l'insertion.<br>";
-                continue; // On arrête le test ici si la création a échoué
-            }
-
-            // 2. READ (Lecture)
-            echo "<br><strong>2. READ :</strong> Récupération des données...<br>";
-            $data = $managerModel->getManager($manager['id']);
-            
-            if ($data) {
-                echo "✅ Données trouvées : " . $data['first_name'] . " " . $data['last_name'] . " (Département : " . $data['departement'] . ")<br>";
-            } else {
-                echo "❌ Introuvable en base.<br>";
-            }
-
-            // 3. UPDATE (Mise à jour)
-            echo "<br><strong>3. UPDATE :</strong> Changement du département vers '{$manager['new_dept']}'...<br>";
-            $updated = $managerModel->updateManager($manager['id'], $manager['nom'], $manager['prenom'], $manager['new_dept'], $manager['tel']);
-            
-            if ($updated) {
-                echo "✅ Mise à jour réussie.<br>";
-                // On refait un petit Read pour prouver que ça a marché
-                $newData = $managerModel->getManager($manager['id']);
-                echo "ℹ️ Nouveau département vérifié en base : " . $newData['departement'] . "<br>";
-            } else {
-                echo "❌ Échec de la mise à jour.<br>";
-            }
-
-            // 4. DELETE (Suppression)
-            echo "<br><strong>4. DELETE :</strong> Suppression du manager...<br>";
-            $deleted = $managerModel->deleteManager($manager['id']);
-            
-            if ($deleted) {
-                echo "✅ Suppression réussie.<br>";
-                // On vérifie qu'il a bien disparu
-                $checkDelete = $managerModel->getManager($manager['id']);
-                if (!$checkDelete) {
-                    echo "ℹ️ Confirmé : Le manager n'existe plus dans la table.<br>";
-                }
-            } else {
-                echo "❌ Échec de la suppression.<br>";
-            }
-            
-            echo "<hr>";
+        $manager = $this->managers->findByUserId($userId);
+        if ($manager === null) {
+            $this->jsonError("Manager introuvable.", 404);
         }
 
-        echo "<strong>Fin des tests.</strong>";
+        $this->json($manager);
     }
 
-    public function show($id)
+    public function update(int $userId): void
     {
-        $managerModel = new Manager($this->db);
-        $manager = $managerModel->getManager($id);
+        $user = Security::requireJsonRole(["admin", "manager"]);
 
-        if ($manager) {
-            echo "Profil du manager : " . $manager['first_name'] . " " . $manager['last_name'] . " (Département : " . $manager['departement'] . ")";
-            // Plus tard : require __DIR__ . '/../Views/manager/show.php';
-        } else {
-            echo "Ce manager n'existe pas.";
+        if ($user["role"] === "manager" && (int) $user["id"] !== $userId) {
+            $this->jsonError(
+                "Vous ne pouvez modifier que votre propre profil.",
+                403,
+            );
         }
+
+        $data = $this->readJsonBody();
+        $success = $this->managers->update($userId, $data);
+
+        if (!$success) {
+            $this->jsonError("Aucune modification effectuée.", 422);
+        }
+
+        $this->json($this->managers->findByUserId($userId));
     }
 
-    public function update($id)
+    public function destroy(int $userId): void
     {
-        $managerModel = new Manager($this->db);
-        
-        // En conditions réelles, ces données proviendront de $_POST
-        $success = $managerModel->updateManager($id, 'Dupont', 'Marc', 'Ressources Humaines', '0700000000');
+        Security::requireJsonRole(["admin"]);
 
-        if ($success) {
-            echo "Le profil a été mis à jour avec succès.";
-        } else {
-            echo "Erreur lors de la mise à jour.";
+        if ($this->managers->findByUserId($userId) === null) {
+            $this->jsonError("Manager introuvable.", 404);
         }
-    }
 
-    public function destroy($id)
-    {
-        $managerModel = new Manager($this->db);
-        $success = $managerModel->deleteManager($id);
-
-        if ($success) {
-            echo "Le manager a été supprimé.";
-        } else {
-            echo "Erreur lors de la suppression.";
-        }
+        $this->managers->delete($userId);
+        http_response_code(204);
     }
 }
