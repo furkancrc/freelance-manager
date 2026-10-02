@@ -7,6 +7,7 @@ require __DIR__ . "/../vendor/autoload.php";
 use App\Controllers\AuthController;
 use App\Controllers\CandidatureController;
 use App\Controllers\FreelanceController;
+use App\Controllers\ManagerController;
 use App\Core\Database;
 use App\Core\Router;
 use App\Core\Security;
@@ -91,6 +92,10 @@ $router->get("/missions/{id}/applications", function (string $id) use (
 
 $router->get("/mentions-legales", function (): void {
     require __DIR__ . "/../src/Views/legals/index.php";
+});
+
+$router->get("/test-manager", function (): void {
+    new ManagerController(Database::getConnection())->testCreate();
 });
 
 $router->dispatch($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
