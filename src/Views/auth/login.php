@@ -1,25 +1,7 @@
 <?php
 /** @var string $csrfToken */
 /** @var string|null $error */
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-ob_start();
-?>
-=======
 ob_start(); ?>
->>>>>>> dccf881 (feat: clean auth and seed)
-=======
-ob_start();
-?>
->>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
-=======
-ob_start(); ?>
->>>>>>> dccf881 (feat: clean auth and seed)
-=======
-ob_start(); ?>
->>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 <h1>Connexion</h1>
 
 <?php if (!empty($error)): ?>
@@ -27,29 +9,9 @@ ob_start(); ?>
 <?php endif; ?>
 
 <form method="post" action="/login">
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
-=======
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(
         $csrfToken,
     ) ?>">
->>>>>>> dccf881 (feat: clean auth and seed)
-=======
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
->>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
-=======
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(
-        $csrfToken,
-    ) ?>">
->>>>>>> dccf881 (feat: clean auth and seed)
-=======
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(
-        $csrfToken,
-    ) ?>">
->>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
 
     <label for="email">Email</label>
     <input type="email" id="email" name="email" required autofocus>
@@ -61,28 +23,6 @@ ob_start(); ?>
 </form>
 <?php
 $content = ob_get_clean();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-$title = 'Connexion';
-require __DIR__ . '/../layouts/auth.php';
-=======
 $title = "Connexion";
 require __DIR__ . "/../layouts/auth.php";
 
->>>>>>> dccf881 (feat: clean auth and seed)
-=======
-$title = 'Connexion';
-require __DIR__ . '/../layouts/auth.php';
->>>>>>> 9301ee5 (feat(auth): add login/logout with session-based roles (F08, #27))
-=======
-$title = "Connexion";
-require __DIR__ . "/../layouts/auth.php";
-
->>>>>>> dccf881 (feat: clean auth and seed)
-=======
-$title = "Connexion";
-require __DIR__ . "/../layouts/auth.php";
-
->>>>>>> 604a8fc1a48dcb72643fa4ddb9af5c465397bd31
